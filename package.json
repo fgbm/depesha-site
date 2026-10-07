@@ -1,0 +1,13 @@
+{
+  "name": "depesha-site",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Лендинг почтового клиента «Депеша»",
+  "scripts": {
+    "shots": "node scripts/shoot.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
