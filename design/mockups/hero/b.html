@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Депеша: одна клавиша на письмо</title>
+<meta name="description" content="Почтовый клиент для компьютера. e закрывает письмо, h откладывает, z отменяет. Linux, Windows, macOS. Бесплатно.">
+<style>
+/* Шрифты локальные, страница не ходит в сеть. */
+@font-face{font-family:'PT Serif';font-style:normal;font-weight:400;font-display:swap;src:url('../../../assets/fonts/pt-serif-cyrillic-400-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'PT Serif';font-style:normal;font-weight:400;font-display:swap;src:url('../../../assets/fonts/pt-serif-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'PT Serif';font-style:normal;font-weight:700;font-display:swap;src:url('../../../assets/fonts/pt-serif-cyrillic-700-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'PT Serif';font-style:normal;font-weight:700;font-display:swap;src:url('../../../assets/fonts/pt-serif-latin-700-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400;font-display:swap;src:url('../../../assets/fonts/golos-text-cyrillic-400-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400;font-display:swap;src:url('../../../assets/fonts/golos-text-latin-400-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:500;font-display:swap;src:url('../../../assets/fonts/golos-text-cyrillic-500-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:500;font-display:swap;src:url('../../../assets/fonts/golos-text-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:700;font-display:swap;src:url('../../../assets/fonts/golos-text-cyrillic-700-normal.woff2') format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:700;font-display:swap;src:url('../../../assets/fonts/golos-text-latin-700-normal.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+
+/* Холодная нейтраль, один синий акцент, острые углы. */
+:root{
+  --bg:#f4f5f7;
+  --panel:#ffffff;
+  --sunk:#e8eaee;
+  --ink:#191c22;
+  --muted:#5b626e;
+  --line:#d7dae0;
+  --accent:#2f5fd0;
+  --accent-dark:#2549a6;
+  --serif:'PT Serif',Georgia,serif;
+  --sans:'Golos Text',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r:6px;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+a{color:inherit;}
+img{max-width:100%;display:block;}
+.wrap{width:min(1200px,100% - 44px);margin-inline:auto;}
+
+.nav{display:flex;align-items:center;gap:18px;min-height:66px;padding:12px 0;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto;}
+.brand img{width:28px;height:28px;}
+.brand span{font-family:var(--serif);font-weight:700;font-size:20px;}
+.nav__links{display:flex;align-items:center;gap:22px;}
+.nav__links a{font-size:15px;text-decoration:none;color:var(--muted);}
+.nav__links a:hover{color:var(--ink);}
+.nav__links a.btn{font-size:16px;color:#fff;background:var(--accent);}
+.nav__links a.btn:hover{color:#fff;background:var(--accent-dark);}
+.btn{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:#fff;text-decoration:none;font-weight:500;font-size:16px;padding:11px 22px;border-radius:var(--r);transition:background .16s ease,transform .16s ease;}
+.btn:hover{background:var(--accent-dark);}
+.btn:active{transform:translateY(1px);}
+.btn--ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn--ghost:hover{background:var(--sunk);}
+
+.hero{display:grid;grid-template-columns:.82fr 1.18fr;gap:46px;align-items:center;padding:44px 0 40px;}
+.hero h1{font-family:var(--serif);font-weight:700;font-size:clamp(2.3rem,4.6vw,3.6rem);line-height:1.05;letter-spacing:-.01em;margin:0 0 20px;max-width:14ch;}
+.lead{font-size:clamp(1.02rem,1.5vw,1.18rem);color:var(--muted);max-width:44ch;margin:0 0 28px;}
+kbd{font-family:var(--sans);font-weight:700;font-size:.8em;background:var(--panel);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 7px;}
+.cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.cta-note{margin:16px 0 0;font-size:13.5px;color:var(--muted);}
+
+/* Живой демо-скриншот разбора входящих. */
+.demo{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -34px rgba(25,28,34,.42);
+}
+.demo__bar{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);background:#fbfbfc;}
+.demo__dots{display:flex;gap:6px;}
+.demo__dots i{width:10px;height:10px;border-radius:50%;background:var(--line);}
+.demo__title{font-size:13px;color:var(--muted);}
+.demo__count{margin-left:auto;font-size:12.5px;font-weight:500;color:var(--accent);background:#eaf0fc;padding:3px 10px;border-radius:999px;}
+.demo__list{list-style:none;margin:0;padding:0;}
+.demo__list li{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--line);}
+.demo__list li:last-child{border-bottom:0;}
+.demo__list li>span:nth-child(2){min-width:0;}
+.demo__list li.is-active{background:#f0f4fe;}
+.demo__list li.is-done{opacity:.34;}
+.avatar{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:var(--accent);}
+.li-a{background:#2f5fd0;} .li-b{background:#7a52c4;} .li-c{background:#2f8a63;} .li-d{background:#b3261e;}
+.who{display:block;font-weight:500;font-size:15px;line-height:1.25;}
+.sub{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.when{font-size:12.5px;color:var(--muted);}
+.demo__hint{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fbfbfc;border-top:1px solid var(--line);font-size:13px;color:var(--muted);flex-wrap:wrap;}
+.demo__hint .k{display:inline-grid;place-items:center;min-width:24px;height:24px;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:#fff;font-weight:700;font-size:12px;color:var(--ink);}
+.demo__empty{padding:26px 16px;text-align:center;font-size:14px;color:var(--muted);}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);margin-top:8px;}
+.steps article{padding:34px 26px 40px;border-right:1px solid var(--line);}
+.steps article:last-child{border-right:0;}
+.steps .k{display:inline-grid;place-items:center;min-width:30px;height:30px;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;background:var(--panel);font-weight:700;margin-bottom:14px;}
+.steps h3{font-family:var(--serif);font-size:1.3rem;margin:0 0 8px;font-weight:700;}
+.steps p{margin:0;color:var(--muted);font-size:15px;}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;gap:34px;padding-top:30px;}
+  .hero h1{max-width:none;}
+  .steps{grid-template-columns:1fr;}
+  .steps article{border-right:0;border-bottom:1px solid var(--line);}
+  .steps article:last-child{border-bottom:0;}
+}
+@media (max-width:560px){
+  .nav__links a:not(.btn){display:none;}
+  .demo__hint span.d{display:none;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+<header class="wrap nav">
+  <a class="brand" href="#"><img src="../../../assets/logo/depesha-small.svg" alt="Знак Депеши"><span>Депеша</span></a>
+  <nav class="nav__links">
+    <a href="https://github.com/fgbm/depesha">Исходный код</a>
+    <a class="btn" href="https://github.com/fgbm/depesha/releases">Скачать</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Одна клавиша на письмо</h1>
+      <p class="lead"><kbd>e</kbd> закрывает письмо, <kbd>h</kbd> откладывает, <kbd>z</kbd> отменяет. Депеша ведёт вас по входящим, пока они не кончатся.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/fgbm/depesha/releases">Скачать Депешу</a>
+        <a class="btn btn--ghost" href="https://github.com/fgbm/depesha">Исходный код</a>
+      </div>
+      <p class="cta-note">Linux, Windows, macOS. Бесплатно, исходный код открыт.</p>
+    </div>
+
+    <div class="demo" id="demo" aria-label="Как разбираются входящие">
+      <div class="demo__bar">
+        <span class="demo__dots"><i></i><i></i><i></i></span>
+        <span class="demo__title">Входящие</span>
+        <span class="demo__count" id="count">3 письма</span>
+      </div>
+      <ul class="demo__list" id="list">
+        <li class="is-active"><span class="avatar li-a">АС</span><span><span class="who">Анна Соловьёва</span><span class="sub">Смета на монтаж, нужен ваш ответ</span></span><span class="when">10:12</span></li>
+        <li><span class="avatar li-b">ИП</span><span><span class="who">Игорь Пантелеев</span><span class="sub">Перенёс созвон на четверг</span></span><span class="when">вчера</span></li>
+        <li><span class="avatar li-c">Бу</span><span><span class="who">Бухгалтерия</span><span class="sub">Счёт на оплату за сентябрь</span></span><span class="when">28 авг</span></li>
+      </ul>
+      <div class="demo__hint">
+        <span class="k">e</span><span class="d">готово</span>
+        <span class="k">h</span><span class="d">отложить</span>
+        <span class="k">z</span><span class="d">отменить</span>
+        <span style="margin-left:auto">Нажмите клавишу, чтобы попробовать</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps">
+    <article>
+      <span class="k">e</span>
+      <h3>Готово и в архив</h3>
+      <p>Письмо закрывается, а следующее открывается само. Ящик тает, пока не опустеет.</p>
+    </article>
+    <article>
+      <span class="k">h</span>
+      <h3>Вернуться позже</h3>
+      <p>Отложите до вечера, утра или понедельника. В срок письмо вернётся во входящие непрочитанным.</p>
+    </article>
+    <article>
+      <span class="k">z</span>
+      <h3>Передумать</h3>
+      <p>Ошиблись с письмом? Нажмите <kbd>z</kbd> или кнопку «Отменить», и оно вернётся на место.</p>
+    </article>
+  </section>
+</main>
+
+<script>
+/* Небольшая демонстрация разбора: e закрывает, h откладывает, z возвращает. Без библиотек. */
+(function(){
+  var list = document.getElementById('list');
+  var count = document.getElementById('count');
+  var items = Array.prototype.slice.call(list.children);
+  var history = [];
+
+  function plural(n){
+    var tail = n % 100;
+    if (tail > 4 && tail < 21) return 'писем';
+    switch (n % 10){ case 1: return 'письмо'; case 2: case 3: case 4: return 'письма'; default: return 'писем'; }
+  }
+  function render(){
+    var left = items.filter(function(el){return !el.classList.contains('is-done');}).length;
+    count.textContent = left + ' ' + plural(left);
+    if (left === 0 && !list.querySelector('.demo__empty')){
+      var p = document.createElement('li');
+      p.className = 'demo__empty';
+      p.textContent = 'Входящие пусты. Разбор закончен.';
+      list.appendChild(p);
+    }
+    if (left > 0){ var e = list.querySelector('.demo__empty'); if (e) e.remove(); }
+    items.forEach(function(el){ el.classList.toggle('is-active', el === items.filter(function(x){return !x.classList.contains('is-done');})[0]); });
+  }
+  function current(){
+    return items.filter(function(el){return !el.classList.contains('is-done');})[0];
+  }
+  function handle(k){
+    if (k === 'e' || k === 'h'){
+      var el = current();
+      if (!el) return;
+      el.classList.add('is-done');
+      if (k === 'h') el.classList.add('is-snoozed');
+      history.push(el);
+    } else if (k === 'z'){
+      var el = history.pop();
+      if (!el) return;
+      el.classList.remove('is-done');
+    }
+    render();
+  }
+  document.addEventListener('keydown', function(ev){
+    if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+    var k = ev.key.toLowerCase();
+    if (k === 'e' || k === 'h' || k === 'z'){ ev.preventDefault(); handle(k); }
+  });
+  render();
+})();
+</script>
+</body>
+</html>
