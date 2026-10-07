@@ -5,9 +5,20 @@
   "type": "module",
   "description": "Лендинг почтового клиента «Депеша»",
   "scripts": {
-    "shots": "node scripts/shoot.mjs"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "og": "node scripts/og.mjs",
+    "check": "astro check",
+    "shots": "node scripts/shoot-site.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.6.0",
+    "astro": "^5.14.0"
   },
   "devDependencies": {
-    "playwright": "^1.63.0"
+    "@astrojs/check": "^0.9.4",
+    "playwright": "^1.63.0",
+    "typescript": "^5.9.3"
   }
 }
