@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Literata';
+        font-style: normal;
+        font-weight: 600;
+        src: url('../public/fonts/literata-cyrillic-600-normal.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Literata';
+        font-style: normal;
+        font-weight: 600;
+        src: url('../public/fonts/literata-latin-600-normal.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Literata';
+        font-style: italic;
+        font-weight: 500;
+        src: url('../public/fonts/literata-cyrillic-500-italic.woff2') format('woff2');
+      }
+      @font-face {
+        font-family: 'Golos Text';
+        font-style: normal;
+        font-weight: 500;
+        src: url('../public/fonts/golos-text-cyrillic-500-normal.woff2') format('woff2');
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background:
+          radial-gradient(900px 620px at 82% 34%, #2c3a50 0%, transparent 60%),
+          radial-gradient(760px 560px at 6% 112%, #2a2433 0%, transparent 60%),
+          #1d2532;
+        color: #f3e9d6;
+        font-family: 'Golos Text', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 116px 96px 84px;
+      }
+      .seal {
+        flex: none;
+        width: 292px;
+        height: 292px;
+        transform: rotate(-8deg);
+        filter: drop-shadow(0 26px 36px rgba(0, 0, 0, 0.55));
+        opacity: 0.95;
+        margin-left: 40px;
+      }
+      .text {
+        max-width: 660px;
+      }
+      h1 {
+        font-family: 'Literata', serif;
+        font-weight: 600;
+        font-size: 78px;
+        line-height: 1.0;
+        letter-spacing: -0.02em;
+      }
+      h1 em {
+        font-style: italic;
+        font-weight: 500;
+        color: #f0a090;
+      }
+      p {
+        margin-top: 34px;
+        font-size: 26px;
+        color: #c9bfae;
+        max-width: 22em;
+      }
+      .brand {
+        position: absolute;
+        left: 96px;
+        top: 72px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-family: 'Literata', serif;
+        font-weight: 600;
+        font-size: 30px;
+      }
+      .brand img {
+        width: 46px;
+        height: 46px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand"><img src="../public/logo/depesha.svg" alt="" />Депеша</div>
+    <div class="text">
+      <h1>Входящие, которые <em>заканчиваются</em></h1>
+      <p>Почтовый клиент для компьютера: e — готово, h — позже, # — в корзину.</p>
+    </div>
+    <img class="seal" src="../public/logo/depesha.svg" alt="" />
+  </body>
+</html>
