@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Каждый пуш в main пересобирает и публикует сайт.
+  push:
+    branches: [main]
+  # Ручной запуск из вкладки Actions.
+  workflow_dispatch:
+  # Раз в сутки: подхватываем новый релиз Депеши, ссылки на файлы которого
+  # берутся при сборке из GitHub API.
+  schedule:
+    - cron: '17 3 * * *'
+  # На будущее: пуш нового релиза Депеши может дёрнуть сайт этим событием.
+  repository_dispatch:
+    types: [depesha-release]
+
+# Права для клонирования репозитория и публикации страницы.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Не запускать несколько публикаций одновременно; не отменять идущую.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Install, build, and upload the site
+        uses: withastro/action@v6
+        with:
+          node-version: 22
+        env:
+          # releases.ts берёт ссылки на файлы последнего релиза через GitHub API;
+          # токен поднимает лимит запросов, сборка работает и без него.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
