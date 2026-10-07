@@ -393,6 +393,12 @@ a{color:inherit}
   .bar nav{display:none}
   .hero{padding:96px 0 40px}
   .hero .wrap{grid-template-columns:1fr;gap:20px}
+  /* Заголовки на узких экранах: кегль растёт с шириной так, чтобы самое длинное слово
+     оставалось в колонке (поля страницы 20px с каждой стороны). Нижняя граница — сегодняшний
+     минимум (не мельче), верхняя — десктопный максимум (не крупнее десктопа). */
+  .hero h1{font-size:clamp(30px,calc((100vw - 40px)/7.9),88px)}
+  .sec-title{font-size:clamp(26px,calc((100vw - 40px)/10.8),48px)}
+  .dl h2{font-size:clamp(40px,calc((100vw - 40px)/7.5),56px)}
   /* Hero-демо: строки потоком, без абсолютных процентов — ничего не обрезается
      и не перекрывается. Тост ложится поверх низа стопки писем, над строкой корзины. */
   .stage{display:flex;flex-direction:column;gap:16px;height:auto;margin:0}
