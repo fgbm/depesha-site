@@ -1,0 +1,87 @@
+<!-- ============ PEOPLE / ROBOTS ============ -->
+<section class="sort grain">
+  <div class="wrap sort-grid">
+    <div>
+      <h2 class="sec-title rv">Сначала <em>люди</em>, потом рассылки</h2>
+      <p class="sec-lede rv">
+        Рассылки и уведомления роботов Депеша узнаёт по заголовкам и складывает отдельно. Человек,
+        который ждёт вашего ответа, не утонет в скидках.
+      </p>
+      <div class="facts rv">
+        <div>
+          <svg viewBox="0 0 24 24"
+            ><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"></path></svg
+          ><span
+            ><b>Оповещения только о людях.</b> А на время работы их можно выключить совсем.</span
+          >
+        </div>
+        <div>
+          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"></path></svg
+          ><span
+            ><b>Отписаться в один клик</b> — там, где отправитель это поддерживает, иначе письмом или
+            на его странице.</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="flow" id="flow" aria-hidden="true">
+      <svg class="rails" viewBox="0 0 600 440"
+        ><path class="trunk" d="M -20 220 C 120 220, 170 220, 230 160 S 330 75, 400 75"></path><path
+          d="M -20 220 C 120 220, 170 220, 230 280 S 330 365, 400 365"></path></svg
+      >
+      <div class="lane lp" id="lane-p">
+        <h4>Люди <b>0</b></h4>
+        <p>Коллеги, клиенты, бухгалтерия</p>
+        <span class="bell">● с оповещением</span>
+      </div>
+      <div class="lane lr" id="lane-r">
+        <h4>Рассылки <b>0</b></h4>
+        <p>Скидки, сервисы, роботы</p>
+        <span class="unsub">Отписаться</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Поток писем в две полосы: люди и рассылки. */
+  (() => {
+    const flow = document.getElementById('flow');
+    if (!flow) return;
+    const STREAM = [
+      ['p', 'Пётр Сидоров', 'ПС', '#2f4a78'],
+      ['r', 'Скидки недели', '%', '#7d8696'],
+      ['p', 'Мария Соколова', 'МС', '#8a3d5c'],
+      ['r', 'Служба доставки', 'СД', '#7d8696'],
+      ['r', 'Сервис отчётов', 'СО', '#7d8696'],
+      ['p', 'Бухгалтерия', 'Бу', '#5d6b48'],
+      ['r', 'Новости банка', 'НБ', '#7d8696'],
+      ['p', 'Анна Белова', 'АБ', '#a5622b'],
+      ['r', 'Уведомление', 'У', '#7d8696'],
+    ];
+    const lanes = { p: document.getElementById('lane-p')!, r: document.getElementById('lane-r')! };
+    const laneN = { p: 0, r: 0 };
+    STREAM.forEach(([k, n, ini, c], i) => {
+      const d = document.createElement('div');
+      d.className = 'mail-dot ' + k;
+      d.title = n!;
+      d.style.background = c!;
+      d.textContent = ini!;
+      d.style.animationDelay = -i * 1.5 + 's';
+      flow.appendChild(d);
+      d.addEventListener('animationiteration', () => {
+        const L = lanes[k as 'p' | 'r'];
+        L.querySelector('b')!.textContent = String(++laneN[k as 'p' | 'r']);
+        L.classList.add('hit');
+        setTimeout(() => L.classList.remove('hit'), 400);
+      });
+    });
+    const fitFlow = () => {
+      if (innerWidth <= 900)
+        flow.style.setProperty('--fs', String(Math.min(1, (flow.parentElement!.clientWidth ?? 600) / 600)));
+      else flow.style.removeProperty('--fs');
+    };
+    fitFlow();
+    addEventListener('resize', fitFlow);
+  })();
+</script>

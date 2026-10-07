@@ -1,0 +1,19 @@
+<script>
+  /* Появление блоков .rv при прокрутке. */
+  (() => {
+    const rio = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            rio.unobserve(e.target);
+          }
+        }),
+      { rootMargin: '0px 0px -12% 0px' },
+    );
+    document.querySelectorAll('.rv').forEach((el, i) => {
+      (el as HTMLElement).style.transitionDelay = ((i % 3) * 90).toString() + 'ms';
+      rio.observe(el);
+    });
+  })();
+</script>

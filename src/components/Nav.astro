@@ -1,0 +1,36 @@
+---
+// Плавающее меню: то же на всех страницах, якоря ведут на главную.
+---
+
+<header class="nav" id="nav">
+  <div class="bar">
+    <a class="brand" href="/#top"><img src="/logo/depesha.svg" alt="" />Депеша</a>
+    <nav>
+      <a href="/#story">Как это работает</a>
+      <a href="/#servers">Exchange и Gmail</a>
+      <a href="/#never">Безопасность</a>
+      <a href="https://github.com/fgbm/depesha">GitHub</a>
+    </nav>
+    <a class="btn btn-wax" href="/#download">Скачать</a>
+  </div>
+</header>
+
+<script>
+  (() => {
+    const nav = document.getElementById('nav');
+    if (!nav) return;
+    const top0 = document.createElement('div');
+    top0.style.cssText = 'position:absolute;top:0;height:12px;width:1px';
+    document.body.prepend(top0);
+    new IntersectionObserver(([e]) => nav.classList.toggle('scrolled', !e.isIntersecting)).observe(top0);
+    const dark = new Set();
+    const dio = new IntersectionObserver(
+      (es) => {
+        es.forEach((e) => (e.isIntersecting ? dark.add(e.target) : dark.delete(e.target)));
+        nav.classList.toggle('light', !dark.size);
+      },
+      { rootMargin: '-44px 0px -94% 0px' },
+    );
+    document.querySelectorAll('.hero,.sort,.dl,.foot').forEach((el) => dio.observe(el));
+  })();
+</script>

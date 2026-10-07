@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Story from '../components/Story.astro';
+import Sort from '../components/Sort.astro';
+import Palette from '../components/Palette.astro';
+import Servers from '../components/Servers.astro';
+import Never from '../components/Never.astro';
+import Download from '../components/Download.astro';
+import Reveal from '../components/Reveal.astro';
+import { getDownloads } from '../lib/releases';
+
+// Последний релиз запрашивается во время сборки; при ошибке — ссылки на страницу релизов.
+const downloads = await getDownloads();
+---
+
+<Base
+  title="Депеша — входящие, которые заканчиваются"
+  description="Депеша — почтовый клиент для компьютера, где у каждого письма одна судьба: готово, позже или в корзину. Нажали клавишу — и уже открыто следующее."
+>
+  <Hero downloads={downloads} />
+  <Story />
+  <Sort />
+  <Palette />
+  <Servers />
+  <Never />
+  <Download downloads={downloads} />
+  <Reveal />
+</Base>

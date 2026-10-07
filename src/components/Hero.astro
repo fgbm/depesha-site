@@ -1,0 +1,271 @@
+---
+import type { Downloads } from '../lib/releases';
+
+interface Props {
+  downloads: Downloads;
+}
+
+const { downloads } = Astro.props;
+const linux = downloads.linux.appimage ?? downloads.linux.deb ?? '';
+const win = downloads.windows.msi ?? downloads.windows.exe ?? '';
+const macArm = downloads.mac.arm ?? '';
+const macX64 = downloads.mac.x64 ?? '';
+---
+
+<!-- ============ HERO ============ -->
+<section class="hero grain" id="top">
+  <svg class="spiral" viewBox="0 0 1000 1000" aria-hidden="true">
+    <path
+      d="M500 500m-40 0a40 40 0 1 1 80 0a80 80 0 1 1 -160 0a120 120 0 1 1 240 0a160 160 0 1 1 -320 0a200 200 0 1 1 400 0a240 240 0 1 1 -480 0a280 280 0 1 1 560 0a320 320 0 1 1 -640 0a360 360 0 1 1 720 0a400 400 0 1 1 -800 0a440 440 0 1 1 880 0"
+    ></path>
+    <path d="M500 500m0 -470a470 470 0 1 1 -1 0"></path>
+  </svg>
+  <div class="wrap">
+    <div>
+      <h1>
+        <span class="line"><span>Входящие,</span></span>
+        <span class="line"><span>которые</span></span>
+        <span class="line"><span><em>заканчиваются</em></span></span>
+      </h1>
+      <p class="lede">
+        Депеша — почтовый клиент для компьютера, где у каждого письма одна судьба: <b>готово</b>,
+        <b>позже</b> или <b>в корзину</b>. Нажали клавишу — и уже открыто следующее.
+      </p>
+      <div class="cta">
+        <a
+          class="btn btn-wax"
+          href="#download"
+          id="cta-main"
+          data-linux={linux}
+          data-win={win}
+          data-mac-arm={macArm}
+          data-mac-x64={macX64}><span class="os"
+            ><span>Скачать для <span class="os-name">Linux</span></span
+            ><small>бесплатно, открытый код</small></span
+          ></a
+        >
+        <a class="btn btn-ghost" href="#story">Посмотреть, как это работает</a>
+      </div>
+      <div class="fine">
+        <span>Linux, Windows, macOS</span><span>Gmail, Яндекс, Exchange и любой IMAP</span>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" aria-label="Демонстрация: разбор входящих клавишами">
+      <div class="inbox-count">Входящие <b id="cnt">6</b></div>
+      <div class="tray tray-h" id="tray-h">
+        <svg viewBox="0 0 24 24"
+          ><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 2M5 3 2 6m17-3 3 3"
+          ></path></svg
+        ><span>Отложено</span><b>0</b>
+      </div>
+      <div class="tray tray-e" id="tray-e">
+        <svg viewBox="0 0 24 24"
+          ><rect x="3" y="4" width="18" height="5" rx="1.5"></rect><path
+            d="M5 9v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9M10 13h4"></path></svg
+        ><span>Архив</span><b>0</b>
+      </div>
+      <div class="tray tray-d" id="tray-d">
+        <svg viewBox="0 0 24 24"
+          ><path d="M4 7h16M10 11v6m4-6v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"
+          ></path></svg
+        ><span>Корзина</span><b>0</b>
+      </div>
+      <div class="desk" id="desk"></div>
+      <div class="seal" id="seal">
+        <span class="ring"></span><img src="/logo/depesha.svg" alt="" /><p>Входящие разобраны</p>
+      </div>
+      <div class="toast" id="toast"><span id="toast-t">В архиве</span><u>Отменить&nbsp;z</u></div>
+      <div class="hint" id="hint">Попробуйте сами — нажмите клавишу</div>
+      <div class="keys">
+        <button class="key" data-k="e"><i>e</i><span>Готово</span></button>
+        <button class="key" data-k="h"><i>h</i><span>Отложить</span></button>
+        <button class="key" data-k="#"><i>#</i><span>Удалить</span></button>
+        <button class="key" data-k="z"><i>z</i><span>Отменить</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Демонстрация на первом экране: разбор входящих клавишами e, h, #, z. */
+  (() => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const LETTERS = [
+      { from: 'Пётр Сидоров', addr: 'p.sidorov@podryad.ru', ini: 'ПС', c: '#2f4a78', t: '09:40', subj: 'Re: Смета на монтаж', snip: 'Пересчитали — сумма выросла на 40 000 ₽. Новая таблица во вложении.', tag: 'att' },
+      { from: 'Бухгалтерия', addr: 'buh@zavod.local', ini: 'Бу', c: '#5d6b48', t: '10:12', subj: 'Счёт на оплату за октябрь', snip: 'Пришлите подписанный счёт до конца недели, оригинал — с курьером.' },
+      { from: 'Скидки недели', addr: 'news@shop.example', ini: '%', c: '#7d8696', t: '08:03', subj: 'Только до воскресенья: −30% на всё', snip: 'Вы получили это письмо, потому что подписались на рассылку.', robot: 1 },
+      { from: 'Мария Соколова', addr: 'm.sokolova@zavod.local', ini: 'МС', c: '#8a3d5c', t: 'вчера', subj: 'Отчёт за сентябрь', snip: 'Посмотрите, пожалуйста, до пятницы — особенно раздел про закупки.', tag: 'att' },
+      { from: 'Служба доставки', addr: 'noreply@delivery.example', ini: 'СД', c: '#7d8696', t: 'вчера', subj: 'Заказ передан курьеру', snip: 'Курьер привезёт заказ завтра с 10:00 до 14:00.', robot: 1 },
+      { from: 'Анна Белова', addr: 'a.belova@zavod.local', ini: 'АБ', c: '#a5622b', t: 'вчера', subj: 'Созвон переносим на четверг', snip: 'В среду не успеваем, давайте в четверг в 11:00?' },
+    ];
+    const SCRIPT = ['e', 'h', '#', 'z', '#', 'h', 'e', 'e'];
+    const desk = document.getElementById('desk')!;
+    const stage = document.getElementById('stage')!;
+    const cntEl = document.getElementById('cnt')!;
+    const seal = document.getElementById('seal')!;
+    const toast = document.getElementById('toast')!;
+    const toastT = document.getElementById('toast-t')!;
+    const hint = document.getElementById('hint')!;
+    const trays = { e: document.getElementById('tray-e')!, h: document.getElementById('tray-h')!, '#': document.getElementById('tray-d')! };
+    const counts: Record<string, number> = { e: 0, h: 0, '#': 0 };
+    const MSG = { e: 'Готово, письмо в архиве', h: 'Вернётся завтра в 9:00', '#': 'Письмо в корзине' };
+    const CLS = { e: 'gone-e', h: 'gone-h', '#': 'gone-d' };
+
+    const els = LETTERS.map((L) => {
+      const d = document.createElement('article');
+      d.className = 'letter off' + (L.robot ? ' robot' : '');
+      d.innerHTML = `<div class="l-head"><span class="ava" style="background:${L.c}">${L.ini}</span><div><div class="l-from">${L.from}</div><div class="l-addr">${L.addr}</div></div><span class="l-time">${L.t}</span></div><div class="l-subj">${L.subj}</div><div class="l-snip">${L.snip}</div>${L.tag ? '<span class="l-tag att">вложение</span>' : L.robot ? '<span class="l-tag">рассылка</span>' : ''}`;
+      desk.appendChild(d);
+      return d;
+    });
+    let queue: HTMLElement[] = [];
+    let hist: { el: HTMLElement; k: string }[] = [];
+    let busy = false;
+    let auto = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let toastTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function layout() {
+      queue.forEach((el, i) => {
+        el.classList.remove('off', 'gone-e', 'gone-h', 'gone-d');
+        el.classList.toggle('top', i === 0);
+        const vis = i < 4;
+        const rot = [0, -2.2, 1.8, -1.2][i] || 0;
+        el.style.transform = `translateY(${-i * 16}px) scale(${1 - i * 0.045}) rotate(${rot}deg)`;
+        el.style.opacity = vis ? String(1 - i * 0.12) : '0';
+        el.style.zIndex = String(10 - i);
+        el.style.filter = i ? `brightness(${1 - i * 0.07})` : 'none';
+      });
+      if (+cntEl.textContent! !== queue.length) {
+        cntEl.textContent = String(queue.length);
+        cntEl.classList.remove('tick');
+        void cntEl.offsetWidth;
+        cntEl.classList.add('tick');
+      }
+    }
+    function bump(k: string) {
+      const t = trays[k as keyof typeof trays];
+      t.querySelector('b')!.textContent = String(counts[k]);
+      t.classList.add('bump');
+      setTimeout(() => t.classList.remove('bump'), 380);
+    }
+    function say(text: string, undo = true) {
+      toastT.textContent = text;
+      toast.querySelector('u')!.style.display = undo ? '' : 'none';
+      toast.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('on'), 1700);
+    }
+    function press(k: string) {
+      const b = document.querySelector(`.key[data-k="${CSS.escape(k)}"]`);
+      if (!b) return;
+      b.classList.add('press');
+      setTimeout(() => b.classList.remove('press'), 160);
+    }
+
+    function act(k: string) {
+      if (busy) return;
+      press(k);
+      if (k === 'z') {
+        const last = hist.pop();
+        if (!last) return;
+        counts[last.k]!--;
+        bump(last.k);
+        last.el.classList.remove(CLS[last.k as keyof typeof CLS]);
+        queue.unshift(last.el);
+        layout();
+        say('Письмо вернулось на место', false);
+        seal.classList.remove('on');
+        return;
+      }
+      if (!queue.length) return;
+      const el = queue.shift()!;
+      el.classList.remove('top');
+      el.classList.add(CLS[k as keyof typeof CLS]);
+      counts[k]!++;
+      setTimeout(() => bump(k), 420);
+      hist.push({ el, k });
+      layout();
+      say(MSG[k as keyof typeof MSG]);
+      if (!queue.length) {
+        busy = true;
+        setTimeout(() => {
+          toast.classList.remove('on');
+          seal.classList.add('on');
+          busy = false;
+        }, 650);
+        if (auto) timer = setTimeout(reset, 3600);
+      }
+    }
+
+    function reset() {
+      seal.classList.remove('on');
+      hist = [];
+      Object.keys(counts).forEach((k) => {
+        counts[k] = 0;
+        trays[k as keyof typeof trays].querySelector('b')!.textContent = '0';
+      });
+      els.forEach((el) => {
+        el.className = 'letter off' + (el.classList.contains('robot') ? ' robot' : '');
+        el.style.cssText = '';
+      });
+      queue = [];
+      cntEl.textContent = '0';
+      els
+        .slice()
+        .reverse()
+        .forEach((el, j) =>
+          setTimeout(() => {
+            queue.unshift(el);
+            el.classList.remove('off');
+            layout();
+          }, 120 + j * 110),
+        );
+      if (auto) timer = setTimeout(() => run(0), 120 + els.length * 110 + 1100);
+    }
+    function run(i: number) {
+      if (!auto) return;
+      if (i >= SCRIPT.length) return;
+      act(SCRIPT[i]!);
+      timer = setTimeout(() => run(i + 1), SCRIPT[i] === 'z' ? 1300 : 1500);
+    }
+    function takeOver() {
+      if (auto) {
+        auto = false;
+        clearTimeout(timer);
+        hint.style.opacity = '0';
+      }
+    }
+
+    let heroVisible = true;
+    new IntersectionObserver(([e]) => (heroVisible = e.isIntersecting), { threshold: 0.25 }).observe(stage);
+    addEventListener('keydown', (ev) => {
+      if (!heroVisible || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+      const k = ev.key === 'Delete' ? '#' : ev.key.toLowerCase();
+      if (!['e', 'h', '#', 'z', 'у', 'р', 'я'].includes(k)) return;
+      const map: Record<string, string> = { 'у': 'e', 'р': 'h', 'я': 'z' };
+      takeOver();
+      act(map[k] || k);
+      if (!queue.length && !hist.length) reset();
+    });
+    document.querySelectorAll('.key').forEach((b) =>
+      b.addEventListener('click', () => {
+        takeOver();
+        const k = (b as HTMLElement).dataset.k!;
+        if (!queue.length && k !== 'z') {
+          reset();
+          return;
+        }
+        act(k);
+      }),
+    );
+    if (reduce) {
+      queue = els.slice();
+      layout();
+      auto = false;
+      hint.textContent = 'Нажмите e, h, # или z';
+    } else reset();
+  })();
+</script>
