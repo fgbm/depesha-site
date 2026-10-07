@@ -42,21 +42,23 @@ a{color:inherit}
 .grain::after{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.55;pointer-events:none;z-index:-1;mix-blend-mode:multiply}
 
 /* ---------- nav ---------- */
-.nav{position:fixed;inset:0 0 auto;z-index:50;transition:background .4s,box-shadow .4s,color .4s;color:var(--cream)}
-.nav .wrap{display:flex;align-items:center;gap:28px;height:72px}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font:600 22px/1 var(--serif);letter-spacing:.005em}
-.brand img{width:34px;height:34px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
-.nav nav{display:flex;gap:26px;margin-left:auto;font-size:15px}
-.nav nav a{text-decoration:none;opacity:.78;transition:opacity .2s}
-.nav nav a:hover{opacity:1}
+.nav{position:fixed;left:0;right:0;top:14px;z-index:50;padding:0 20px;pointer-events:none}
+.bar{pointer-events:auto;max-width:1208px;margin:0 auto;height:60px;padding:0 8px 0 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-radius:18px;color:var(--cream);background:transparent;box-shadow:inset 0 0 0 1px transparent;transition:background .35s,box-shadow .35s,color .35s,max-width .5s var(--ease)}
+.nav.scrolled .bar{max-width:980px;background:rgba(29,37,50,.62);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 12px 30px -14px rgba(0,0,0,.55)}
+.nav.scrolled.light .bar{background:rgba(246,238,224,.78);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(29,37,50,.08),0 12px 30px -16px rgba(29,37,50,.35)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:600 21px/1 var(--serif);letter-spacing:.005em;justify-self:start}
+.brand img{width:32px;height:32px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.bar nav{display:flex;gap:4px;font-size:15px}
+.bar nav a{text-decoration:none;padding:9px 14px;border-radius:10px;opacity:.8;transition:opacity .2s,background .2s}
+.bar nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
+.nav.light .bar nav a:hover{background:rgba(29,37,50,.06)}
+.bar .btn{justify-self:end;padding:11px 16px;font-size:15px;border-radius:11px}
 .btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font:600 16px/1 var(--sans);border-radius:12px;padding:16px 22px;transition:transform .25s var(--spring),box-shadow .25s,background .2s}
 .btn-wax{background:var(--wax);color:#fff6ee;box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 10px 24px -10px rgba(179,38,30,.8)}
 .btn-wax:hover{background:#c12b22;transform:translateY(-2px)}
 .btn-wax:active{transform:translateY(1px)}
 .btn-ghost{color:inherit;box-shadow:inset 0 0 0 1.5px currentColor;opacity:.85}
 .btn-ghost:hover{opacity:1;transform:translateY(-2px)}
-.nav .btn{padding:11px 16px;font-size:15px;border-radius:10px}
-.nav.solid{background:rgba(246,238,224,.86);backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);color:var(--ink);box-shadow:0 1px 0 var(--paper-3)}
 
 /* ---------- hero ---------- */
 .hero{background:radial-gradient(1100px 700px at 78% 42%,#2c3a50 0%,transparent 60%),radial-gradient(800px 600px at 10% 110%,#2a2433 0%,transparent 60%),var(--navy);color:var(--cream);min-height:100dvh;padding:120px 0 72px;display:flex;align-items:center;overflow:hidden;position:relative}
@@ -385,8 +387,9 @@ a{color:inherit}
 }
 @media (max-width:900px){
   .wrap{padding:0 20px}
-  .nav nav a:not(.btn){display:none}
-  .nav .wrap{height:62px}
+  .nav{top:10px;padding:0 10px}
+  .bar{height:54px;grid-template-columns:1fr auto;padding:0 6px 0 12px}
+  .bar nav{display:none}
   .hero{padding:96px 0 40px}
   .hero .wrap{grid-template-columns:1fr;gap:20px}
   .stage{height:470px;margin:0 -8px}
@@ -434,15 +437,15 @@ a{color:inherit}
 <body>
 
 <header class="nav" id="nav">
-  <div class="wrap">
+  <div class="bar">
     <a class="brand" href="#top"><img src="../../../assets/logo/depesha.svg" alt="">Депеша</a>
     <nav>
       <a href="#story">Как это работает</a>
       <a href="#servers">Exchange и Gmail</a>
       <a href="#never">Безопасность</a>
       <a href="https://github.com/fgbm/depesha">GitHub</a>
-      <a class="btn btn-wax" href="#download">Скачать</a>
     </nav>
+    <a class="btn btn-wax" href="#download">Скачать</a>
   </div>
 </header>
 
@@ -669,8 +672,13 @@ a{color:inherit}
   document.querySelector(`.os-card[data-os="${os}"]`).classList.add('me');
 
   /* ---------- nav ---------- */
-  const nav = document.getElementById('nav'), hero = document.getElementById('top');
-  new IntersectionObserver(([e]) => nav.classList.toggle('solid', !e.isIntersecting), {rootMargin:'-72px 0px 0px 0px'}).observe(hero);
+  const nav = document.getElementById('nav');
+  const top0 = document.createElement('div'); top0.style.cssText = 'position:absolute;top:0;height:12px;width:1px';
+  document.body.prepend(top0);
+  new IntersectionObserver(([e]) => nav.classList.toggle('scrolled', !e.isIntersecting)).observe(top0);
+  const dark = new Set();
+  const dio = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? dark.add(e.target) : dark.delete(e.target)); nav.classList.toggle('light', !dark.size); }, {rootMargin:'-44px 0px -94% 0px'});
+  document.querySelectorAll('.hero,.sort,.dl,.foot').forEach(el => dio.observe(el));
 
   /* ---------- reveal ---------- */
   const rio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); } }), {rootMargin:'0px 0px -12% 0px'});
