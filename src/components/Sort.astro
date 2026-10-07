@@ -77,9 +77,12 @@
       });
     });
     const fitFlow = () => {
-      if (innerWidth <= 900)
-        flow.style.setProperty('--fs', String(Math.min(1, (flow.parentElement!.clientWidth ?? 600) / 600)));
-      else flow.style.removeProperty('--fs');
+      if (innerWidth <= 900) {
+        const p = flow.parentElement!;
+        const s = getComputedStyle(p);
+        const inner = (p.clientWidth || 600) - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight);
+        flow.style.setProperty('--fs', String(Math.min(1, inner / 600)));
+      } else flow.style.removeProperty('--fs');
     };
     fitFlow();
     addEventListener('resize', fitFlow);

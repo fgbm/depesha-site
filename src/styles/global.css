@@ -25,8 +25,9 @@
   --grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.15 0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:var(--sans);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{font-family:var(--sans);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip}
+h1,h2,h3,h4{overflow-wrap:break-word}
 a{color:inherit}
 .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
 .kbd{display:inline-grid;place-items:center;min-width:1.6em;height:1.6em;padding:0 .4em;border-radius:6px;font:600 .82em/1 var(--sans);background:var(--paper);color:var(--ink);box-shadow:0 2px 0 var(--paper-edge),inset 0 0 0 1px var(--paper-3);vertical-align:.1em}
@@ -45,7 +46,7 @@ a{color:inherit}
 .bar nav a:hover{opacity:1;background:rgba(255,255,255,.08)}
 .nav.light .bar nav a:hover{background:rgba(29,37,50,.06)}
 .bar .btn{justify-self:end;padding:11px 16px;font-size:15px;border-radius:11px}
-.btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font:600 16px/1 var(--sans);border-radius:12px;padding:16px 22px;transition:transform .25s var(--spring),box-shadow .25s,background .2s}
+.btn{display:inline-flex;align-items:center;gap:10px;max-width:100%;border:0;cursor:pointer;text-decoration:none;font:600 16px/1 var(--sans);border-radius:12px;padding:16px 22px;transition:transform .25s var(--spring),box-shadow .25s,background .2s}
 .btn-wax{background:var(--wax);color:#fff6ee;box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 -2px 0 rgba(0,0,0,.18) inset,0 10px 24px -10px rgba(179,38,30,.8)}
 .btn-wax:hover{background:#c12b22;transform:translateY(-2px)}
 .btn-wax:active{transform:translateY(1px)}
@@ -60,7 +61,7 @@ a{color:inherit}
 .spiral path+path{stroke:#433043;animation-delay:.9s}
 @keyframes draw{to{stroke-dashoffset:0}}
 .hero .wrap{display:grid;grid-template-columns:1.02fr 1fr;gap:56px;align-items:center;width:100%}
-.hero h1{font:600 clamp(46px,6.3vw,88px)/.98 var(--serif);letter-spacing:-.02em;text-wrap:balance}
+.hero h1{font:600 clamp(30px,6.3vw,88px)/.98 var(--serif);letter-spacing:-.02em;text-wrap:balance}
 .hero h1 em{font-style:italic;font-weight:500;color:#f0a090;display:inline-block}
 .hero h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
 .hero h1 .line>span{display:inline-block;transform:translateY(105%);animation:rise 1s var(--ease) forwards}
@@ -80,6 +81,9 @@ a{color:inherit}
 
 /* stage */
 .stage{position:relative;height:540px;opacity:0;animation:fade 1s var(--ease) .4s forwards}
+/* Обёртки строк сцены: на десктопе прозрачны (позиции заданы процентами от .stage),
+   на узких экранах становятся flex-строками. */
+.stage-top,.stage-mid,.stage-bot{display:contents}
 .desk{position:absolute;left:50%;top:46%;width:min(440px,100%);height:250px;translate:-50% -50%}
 .letter{position:absolute;inset:0;border-radius:14px;background:var(--paper);color:var(--ink);padding:20px 22px 18px;box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 2px rgba(0,0,0,.18),0 22px 40px -18px rgba(0,0,0,.55);transform-origin:50% 60%;transition:transform .7s var(--ease),opacity .55s var(--ease),filter .5s;will-change:transform,opacity;overflow:hidden}
 .letter::before{content:"";position:absolute;inset:0;background-image:var(--grain);opacity:.6;mix-blend-mode:multiply;pointer-events:none}
@@ -137,7 +141,7 @@ a{color:inherit}
 
 /* ---------- story ---------- */
 .story{padding:150px 0 60px;background:var(--paper)}
-.sec-title{font:600 clamp(36px,4.4vw,62px)/1.04 var(--serif);letter-spacing:-.018em;max-width:15em;text-wrap:balance}
+.sec-title{font:600 clamp(26px,4.4vw,62px)/1.04 var(--serif);letter-spacing:-.018em;max-width:15em;text-wrap:balance}
 .sec-title em{font-style:italic;font-weight:500;color:var(--wax)}
 .sec-lede{margin-top:20px;max-width:34em;font-size:19px;color:var(--ink-2)}
 .story-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;margin-top:80px}
@@ -368,7 +372,7 @@ a{color:inherit}
 .foot a{text-decoration:none;color:var(--cream-2)}
 .foot .brand{color:var(--cream);font-size:18px}
 .foot .brand img{width:26px;height:26px}
-.foot nav{margin-left:auto;display:flex;gap:22px}
+.foot nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:10px 22px}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
@@ -389,20 +393,21 @@ a{color:inherit}
   .bar nav{display:none}
   .hero{padding:96px 0 40px}
   .hero .wrap{grid-template-columns:1fr;gap:20px}
-  .stage{height:470px;margin:0 -8px}
-  .desk{width:calc(100% - 16px);height:232px;top:47%}
+  /* Hero-демо: строки потоком, без абсолютных процентов — ничего не обрезается
+     и не перекрывается. Тост ложится поверх низа стопки писем, над строкой корзины. */
+  .stage{display:flex;flex-direction:column;gap:16px;height:auto;margin:0}
+  .stage-top,.stage-bot{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .stage-mid{display:block;position:relative;margin-top:40px}
+  .desk{position:relative;left:auto;top:auto;translate:none;width:100%;height:250px;margin:0}
   .l-subj{font-size:19px}
-  .tray{font-size:12.5px;padding:7px 10px 7px 8px}
-  .tray span{display:none}
-  .tray-e,.tray-d{bottom:17%}
-  .inbox-count{top:3%}
-  .tray-h{top:3%}
-  .keys{gap:6px;width:100%;justify-content:center}
+  .inbox-count{position:static;left:auto;top:auto;font-size:13px}
+  .inbox-count b{font-size:30px}
+  .tray{position:static;top:auto;right:auto;bottom:auto;left:auto;font-size:12.5px;padding:7px 10px 7px 8px}
+  .keys{position:static;left:auto;bottom:auto;translate:none;gap:6px;width:100%;justify-content:center}
   .key{padding:6px;font-size:12.5px;gap:6px}
   .key i{width:30px;height:30px}
   .key span{display:none}
-  .hint{bottom:50px}
-  .toast{top:auto;bottom:50px;font-size:13px}
+  .toast{position:absolute;left:50%;right:auto;top:auto;bottom:6px;translate:-50% 0;font-size:12.5px;max-width:100%}
   .hint{display:none}
   .story{padding:100px 0 20px}
   .story-grid{grid-template-columns:1fr;gap:0;margin-top:40px}
@@ -423,7 +428,11 @@ a{color:inherit}
   .flow{transform:scale(var(--fs,.56));transform-origin:0 0;margin-bottom:calc(440px * (var(--fs,.56) - 1))}
   .srv dl div{grid-template-columns:1fr;gap:4px}
   .oses{grid-template-columns:1fr}
-  .foot nav{margin-left:0}
+  .never .stamp svg.txt{inset:-6%;width:112%;height:112%}
+  .never{overflow:hidden}
+  h1,h2,h3,h4{hyphens:auto}
+  .foot .wrap{flex-direction:column;align-items:flex-start;gap:14px}
+  .foot nav{margin-left:0;flex-wrap:wrap;gap:8px 18px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
