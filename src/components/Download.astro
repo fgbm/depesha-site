@@ -7,10 +7,20 @@ interface Props {
 }
 
 const { downloads } = Astro.props;
-const linuxHref = pick(downloads.linux.appimage, downloads.linux.deb, downloads.linux.rpm);
-const winHref = pick(downloads.windows.msi, downloads.windows.exe);
-const macHref = pick(downloads.mac.arm, downloads.mac.x64);
 const version = downloads.version;
+const linux = [
+  { label: 'AppImage', href: pick(downloads.linux.appimage) },
+  { label: '.deb', href: pick(downloads.linux.deb) },
+  { label: '.rpm', href: pick(downloads.linux.rpm) },
+];
+const windows = [
+  { label: '.msi', href: pick(downloads.windows.msi) },
+  ...(downloads.windows.exe ? [{ label: '.exe', href: downloads.windows.exe }] : []),
+];
+const mac = [
+  { label: 'Apple Silicon', href: pick(downloads.mac.arm) },
+  { label: 'Intel', href: pick(downloads.mac.x64) },
+];
 ---
 
 <!-- ============ DOWNLOAD ============ -->
@@ -22,20 +32,27 @@ const version = downloads.version;
       Бесплатно, с открытым кодом. Сама следит за новыми версиями, каждое обновление подписано.
     </p>
     <div class="oses rv">
-      <a class="os-card" data-os="linux" href={linuxHref}
-        ><span class="here">ваша система</span><h4>Linux</h4><p>.deb · .rpm · AppImage</p></a
-      >
-      <a class="os-card" data-os="win" href={winHref}
-        ><span class="here">ваша система</span><h4>Windows</h4><p>.msi</p></a
-      >
-      <a
-        class="os-card"
-        data-os="mac"
-        href={macHref}
-        data-arm={downloads.mac.arm ?? ''}
-        data-x64={downloads.mac.x64 ?? ''}
-        ><span class="here">ваша система</span><h4>macOS</h4><p>.dmg</p></a
-      >
+      <div class="os-card" data-os="linux">
+        <span class="here">ваша система</span>
+        <h4>Linux</h4>
+        <div class="fmts">
+          {linux.map((f) => <a href={f.href}>{f.label}</a>)}
+        </div>
+      </div>
+      <div class="os-card" data-os="win">
+        <span class="here">ваша система</span>
+        <h4>Windows</h4>
+        <div class="fmts">
+          {windows.map((f) => <a href={f.href}>{f.label}</a>)}
+        </div>
+      </div>
+      <div class="os-card" data-os="mac">
+        <span class="here">ваша система</span>
+        <h4>macOS</h4>
+        <div class="fmts">
+          {mac.map((f) => <a href={f.href}>{f.label}</a>)}
+        </div>
+      </div>
     </div>
     {version && <p class="version rv">Версия {version}</p>}
     <p class="warn rv">
@@ -46,7 +63,7 @@ const version = downloads.version;
 </section>
 
 <script>
-  /* Определение системы посетителя: подпись кнопок, подсветка карточки и прямая ссылка. */
+  /* Определение системы посетителя: подсветка карточки и прямая ссылка главной кнопки. */
   (() => {
     const ua = navigator.userAgent;
     const os = /Windows/.test(ua) ? 'win' : /Mac/.test(ua) ? 'mac' : 'linux';
@@ -56,14 +73,8 @@ const version = downloads.version;
     const nameEl = document.querySelector('.os-name');
     if (nameEl) nameEl.textContent = { win: 'Windows', mac: 'macOS', linux: 'Linux' }[os]!;
 
-    const card = document.querySelector<HTMLAnchorElement>(`.os-card[data-os="${os}"]`);
+    const card = document.querySelector(`.os-card[data-os="${os}"]`);
     if (card) card.classList.add('me');
-
-    const macCard = document.querySelector<HTMLAnchorElement>('.os-card[data-os="mac"]');
-    if (macCard) {
-      const url = (arm ? macCard.dataset.arm : macCard.dataset.x64) || macCard.dataset.x64;
-      if (url) macCard.href = url;
-    }
 
     const cta = document.getElementById('cta-main');
     if (cta) {
