@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Такого письма нет — Депеша"
+  description="Страница не найдена. Вернитесь на главную."
+>
+  <main class="nf grain">
+    <div class="wrap">
+      <img src="/logo/depesha.svg" alt="" />
+      <h1>Такого письма нет</h1>
+      <p>Страница не найдена — возможно, её уже разобрали или ссылка устарела.</p>
+      <a class="btn btn-wax" href="/">На главную</a>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 0 80px;
+  }
+  .nf .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .nf img {
+    width: 150px;
+    height: 150px;
+    transform: rotate(-8deg);
+    filter: drop-shadow(0 30px 40px rgba(140, 27, 21, 0.35));
+    margin-bottom: 14px;
+  }
+  .nf h1 {
+    font: 600 clamp(40px, 6vw, 72px) / 1 var(--serif);
+    letter-spacing: -0.02em;
+  }
+  .nf p {
+    margin-top: 16px;
+    max-width: 34em;
+    font-size: 18px;
+    color: var(--ink-2);
+  }
+  .nf a {
+    margin-top: 30px;
+  }
+</style>
