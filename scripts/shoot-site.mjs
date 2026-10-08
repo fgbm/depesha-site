@@ -13,6 +13,13 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 const out = resolve(root, 'design/site-shots');
 
+// Единственный внешний адрес, который странице разрешено запрашивать: GitHub API
+// за номером последнего релиза. В тестах подменяем его фикстурой, чтобы не
+// зависеть от сети и лимита.
+const releaseUrl = 'https://api.github.com/repos/fgbm/depesha/releases/latest';
+const fixture = JSON.parse(readFileSync(resolve(root, 'scripts/fixtures/release.json'), 'utf8'));
+const json = (body) => ({ status: 200, contentType: 'application/json', body: JSON.stringify(body) });
+
 if (!existsSync(join(dist, 'index.html'))) {
   console.error('Нет dist/index.html — сначала соберите сайт: npm run build');
   process.exit(1);
@@ -65,6 +72,7 @@ for (const [name, width, height] of [
   ['375', 375, 812],
 ]) {
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+  await page.route(releaseUrl, (r) => r.fulfill(json(fixture)));
   await page.addInitScript(() => {
     window.__csp = [];
     document.addEventListener('securitypolicyviolation', (e) => {
@@ -81,7 +89,7 @@ for (const [name, width, height] of [
   page.on('requestfailed', (r) => problems.push(`${name} requestfailed: ${r.url()}`));
   page.on('request', (r) => {
     const u = r.url();
-    if (u.startsWith(base) || u.startsWith('data:')) return;
+    if (u.startsWith(base) || u.startsWith('data:') || u === releaseUrl) return;
     problems.push(`${name} external: ${u}`);
   });
 
@@ -117,6 +125,67 @@ for (const [name, width, height] of [
   }
   const csp = await page.evaluate(() => window.__csp);
   for (const v of csp) problems.push(`${name} CSP(event): ${v}`);
+  await page.close();
+}
+
+// --- Живой релиз: ответ GitHub подменяем фикстурой с версией 9.9.9 ---
+const fixture999 = JSON.parse(JSON.stringify(fixture).replaceAll('0.7.0', '9.9.9'));
+const UA = {
+  linux: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+  win: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+  mac: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+};
+const HERO_EXT = { linux: '.AppImage', win: '.msi', mac: '.dmg' };
+
+for (const [os, userAgent] of Object.entries(UA)) {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, userAgent });
+  await page.route(releaseUrl, (r) => r.fulfill(json(fixture999)));
+  await page.goto(base + '/', { waitUntil: 'load' });
+  await page.waitForTimeout(1200);
+  const got = await page.evaluate(() => ({
+    version: document.querySelector('.dl .version')?.textContent?.trim() ?? '',
+    hero: document.getElementById('cta-main')?.getAttribute('href') ?? '',
+    chips: [...document.querySelectorAll('.os-card .fmts a[data-fmt]')].map((a) => [
+      a.getAttribute('data-fmt'),
+      a.getAttribute('href'),
+    ]),
+  }));
+  const chip = (f) => got.chips.find(([k]) => k === f)?.[1] ?? '';
+  if (!got.version.includes('9.9.9')) problems.push(`live ${os}: версия не обновилась (${got.version})`);
+  if (!got.hero.includes('9.9.9')) problems.push(`live ${os}: кнопка hero без 9.9.9 (${got.hero})`);
+  if (!got.hero.endsWith(HERO_EXT[os])) problems.push(`live ${os}: hero не ${HERO_EXT[os]} (${got.hero})`);
+  for (const f of ['appimage', 'deb', 'rpm', 'msi', 'arm', 'x64']) {
+    if (!chip(f).includes('9.9.9')) problems.push(`live ${os}: чип ${f} без 9.9.9 (${chip(f)})`);
+  }
+  await page.close();
+}
+
+// --- Ошибки GitHub (403 и таймаут) оставляют вшитые значения, без pageerror ---
+const FAILS = [
+  ['403', (r) => r.fulfill({ status: 403, contentType: 'application/json', body: '{"message":"rate limit"}' })],
+  [
+    'таймаут',
+    (r) =>
+      new Promise((res) => {
+        // Запрос «висит» дольше четырёх секунд — срабатывает AbortController страницы.
+        setTimeout(() => {
+          r.fulfill(json(fixture999)).catch(() => {});
+          res();
+        }, 5500);
+      }),
+  ],
+];
+for (const [label, respond] of FAILS) {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const pageErrors = [];
+  page.on('pageerror', (e) => pageErrors.push(e.message));
+  await page.route(releaseUrl, respond);
+  await page.goto(base + '/', { waitUntil: 'load' });
+  const baked = await page.evaluate(() => document.querySelector('.dl .version')?.getAttribute('data-version') ?? '');
+  await page.waitForTimeout(4500);
+  const after = await page.evaluate(() => document.querySelector('.dl .version')?.textContent?.trim() ?? '');
+  if (!after.includes(baked)) problems.push(`live ${label}: вшитая версия не сохранилась («${baked}» -> «${after}»)`);
+  if (pageErrors.length) problems.push(`live ${label}: pageerror: ${pageErrors.join('; ')}`);
   await page.close();
 }
 

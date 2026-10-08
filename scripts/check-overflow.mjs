@@ -17,6 +17,12 @@ import { dirname, resolve, extname, normalize, join } from 'node:path';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 
+// Страница сама спрашивает у GitHub номер последнего релиза. В проверке
+// подменяем этот запрос фикстурой: так тест не зависит от сети и лимита,
+// а любой другой внешний запрос остаётся ошибкой.
+const releaseUrl = 'https://api.github.com/repos/fgbm/depesha/releases/latest';
+const fixture = readFileSync(resolve(root, 'scripts/fixtures/release.json'), 'utf8');
+
 // Собираем свежий dist, чтобы проверять ровно то, что уйдёт на сайт.
 execSync('npm run build', { cwd: root, stdio: 'inherit' });
 
@@ -122,6 +128,14 @@ const problems = [];
 for (const pg of pages) {
   for (const width of widths) {
     const page = await browser.newPage({ viewport: { width, height: 812 } });
+    await page.route(releaseUrl, (r) =>
+      r.fulfill({ status: 200, contentType: 'application/json', body: fixture }),
+    );
+    page.on('request', (r) => {
+      const u = r.url();
+      if (u.startsWith(base) || u.startsWith('data:') || u === releaseUrl) return;
+      problems.push(`${pg.name} @${width} external: ${u}`);
+    });
     await page.goto(base + pg.path, { waitUntil: 'load' });
     await page.waitForTimeout(500);
 

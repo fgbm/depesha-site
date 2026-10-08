@@ -49,7 +49,7 @@ export default defineConfig({
       algorithm: 'SHA-256',
       scriptDirective: { resources: ["'self'"] },
       styleDirective: { resources: ["'self'", "'unsafe-inline'"] },
-      directives: ["default-src 'self'", "img-src 'self' data:"],
+      directives: ["default-src 'self'", "img-src 'self' data:", "connect-src 'self' https://api.github.com"],
     },
   },
 });

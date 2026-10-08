@@ -9,17 +9,17 @@ interface Props {
 const { downloads } = Astro.props;
 const version = downloads.version;
 const linux = [
-  { label: 'AppImage', href: pick(downloads.linux.appimage) },
-  { label: '.deb', href: pick(downloads.linux.deb) },
-  { label: '.rpm', href: pick(downloads.linux.rpm) },
+  { label: 'AppImage', fmt: 'appimage', href: pick(downloads.linux.appimage) },
+  { label: '.deb', fmt: 'deb', href: pick(downloads.linux.deb) },
+  { label: '.rpm', fmt: 'rpm', href: pick(downloads.linux.rpm) },
 ];
 const windows = [
-  { label: '.msi', href: pick(downloads.windows.msi) },
-  ...(downloads.windows.exe ? [{ label: '.exe', href: downloads.windows.exe }] : []),
+  { label: '.msi', fmt: 'msi', href: pick(downloads.windows.msi) },
+  ...(downloads.windows.exe ? [{ label: '.exe', fmt: 'exe', href: downloads.windows.exe }] : []),
 ];
 const mac = [
-  { label: 'Apple Silicon', href: pick(downloads.mac.arm) },
-  { label: 'Intel', href: pick(downloads.mac.x64) },
+  { label: 'Apple Silicon', fmt: 'arm', href: pick(downloads.mac.arm) },
+  { label: 'Intel', fmt: 'x64', href: pick(downloads.mac.x64) },
 ];
 ---
 
@@ -36,25 +36,25 @@ const mac = [
         <span class="here">ваша система</span>
         <h4>Linux</h4>
         <div class="fmts">
-          {linux.map((f) => <a href={f.href}>{f.label}</a>)}
+          {linux.map((f) => <a href={f.href} data-fmt={f.fmt}>{f.label}</a>)}
         </div>
       </div>
       <div class="os-card" data-os="win">
         <span class="here">ваша система</span>
         <h4>Windows</h4>
         <div class="fmts">
-          {windows.map((f) => <a href={f.href}>{f.label}</a>)}
+          {windows.map((f) => <a href={f.href} data-fmt={f.fmt}>{f.label}</a>)}
         </div>
       </div>
       <div class="os-card" data-os="mac">
         <span class="here">ваша система</span>
         <h4>macOS</h4>
         <div class="fmts">
-          {mac.map((f) => <a href={f.href}>{f.label}</a>)}
+          {mac.map((f) => <a href={f.href} data-fmt={f.fmt}>{f.label}</a>)}
         </div>
       </div>
     </div>
-    {version && <p class="version rv">Версия {version}</p>}
+    <p class="version rv" data-version={version ?? ''} hidden={!version}>{version && `Версия ${version}`}</p>
     <p class="warn rv">
       Сборки пока не подписаны сертификатом разработчика, поэтому при первом запуске Windows и macOS
       предупредят о неизвестном издателе.
@@ -63,12 +63,13 @@ const mac = [
 </section>
 
 <script>
-  /* Определение системы посетителя: подсветка карточки и прямая ссылка главной кнопки. */
+  /* Определение системы посетителя: подсветка карточки и прямая ссылка главной
+     кнопки. Затем — свежая версия и ссылки на файлы прямо из GitHub. */
+  import { detectOs, chooseUrl } from '../lib/os';
+  import { initLiveRelease } from '../scripts/live-release';
+
   (() => {
-    const ua = navigator.userAgent;
-    const os = /Windows/.test(ua) ? 'win' : /Mac/.test(ua) ? 'mac' : 'linux';
-    const na = navigator as Navigator & { userAgentData?: { architecture?: string } };
-    const arm = na.userAgentData?.architecture === 'arm';
+    const { os, arm } = detectOs();
 
     const nameEl = document.querySelector('.os-name');
     if (nameEl) nameEl.textContent = { win: 'Windows', mac: 'macOS', linux: 'Linux' }[os]!;
@@ -76,11 +77,17 @@ const mac = [
     const card = document.querySelector(`.os-card[data-os="${os}"]`);
     if (card) card.classList.add('me');
 
-    const cta = document.getElementById('cta-main');
+    const cta = document.getElementById('cta-main') as HTMLAnchorElement | null;
     if (cta) {
-      const url =
-        os === 'win' ? cta.dataset.win : os === 'mac' ? (arm ? cta.dataset.macArm : cta.dataset.macX64) : cta.dataset.linux;
+      const url = chooseUrl(os, arm, {
+        linux: cta.dataset.linux ?? '',
+        win: cta.dataset.win ?? '',
+        macArm: cta.dataset.macArm ?? '',
+        macX64: cta.dataset.macX64 ?? '',
+      });
       if (url) cta.setAttribute('href', url);
     }
   })();
+
+  initLiveRelease();
 </script>
