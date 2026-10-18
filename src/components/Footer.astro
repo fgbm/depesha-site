@@ -1,16 +1,38 @@
 ---
-// Подвал: на главной есть ссылка на политику конфиденциальности.
+// Подвал: политика конфиденциальности и переключение языка на всех страницах.
+interface Props {
+  lang?: 'ru' | 'en';
+}
+
+const { lang = 'ru' } = Astro.props;
+const en = lang === 'en';
 ---
 
 <footer class="foot">
   <div class="wrap">
-    <a class="brand" href="/#top"><img src="/logo/depesha.svg" alt="" />Депеша</a>
+    <a class="brand" href={en ? '/en/' : '/#top'}
+      ><img src="/logo/depesha.svg" alt="" />{en ? 'Depesha' : 'Депеша'}</a
+    >
     <span>MIT / Apache-2.0</span>
     <nav>
-      <a href="https://github.com/fgbm/depesha">Исходный код</a>
-      <a href="https://github.com/fgbm/depesha/releases">Все версии</a>
-      <a href="/#never">Безопасность</a>
-      <a href="/privacy/">Конфиденциальность</a>
+      {
+        en ? (
+          <>
+            <a href="https://github.com/fgbm/depesha">Source code</a>
+            <a href="https://github.com/fgbm/depesha/releases">All releases</a>
+            <a href="/en/privacy/">Privacy</a>
+            <a href="/" hreflang="ru" lang="ru">Русский</a>
+          </>
+        ) : (
+          <>
+            <a href="https://github.com/fgbm/depesha">Исходный код</a>
+            <a href="https://github.com/fgbm/depesha/releases">Все версии</a>
+            <a href="/#never">Безопасность</a>
+            <a href="/privacy/">Конфиденциальность</a>
+            <a href="/en/" hreflang="en" lang="en">English</a>
+          </>
+        )
+      }
     </nav>
   </div>
 </footer>

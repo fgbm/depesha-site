@@ -1,0 +1,259 @@
+---
+import Base from '../../../layouts/Base.astro';
+---
+
+<Base
+  title="Privacy policy — Depesha"
+  description="Privacy policy of the Depesha website and desktop app: no cookies, no analytics, no trackers; your mail stays on your computer and your mail server."
+  lang="en"
+  alternates={{ ru: '/privacy/', en: '/en/privacy/' }}
+>
+  <main class="legal">
+    <div class="wrap">
+      <h1 class="sec-title">Privacy <em>policy</em></h1>
+      <p class="legal-date">Effective date: 18 October 2026.</p>
+      <div class="legal-body">
+        <p>
+          This is the privacy policy of the website depesha-app.ru and of the desktop application
+          Depesha (Депеша), called the app below. In short: the website collects nothing about you,
+          and the app works with your mail directly, without passing it on to anyone.
+        </p>
+
+        <h2>What data the app accesses</h2>
+        <p>
+          Depesha receives mail and sends mail. To do that it connects to the mail servers you already
+          have and works with the data they hold, and with what you keep on your own computer. The
+          app contains no telemetry and sends the developer no usage statistics, no message contents
+          and no information about your accounts.
+        </p>
+        <ul>
+          <li>
+            <b>Mail.</b> Messages are received and sent directly between the app and your mail server
+            over IMAP, SMTP or Exchange Web Services: message headers and bodies, attachments,
+            folders, flags and labels. The app has no server of its own, and your mail does not pass
+            through one.
+          </li>
+          <li>
+            <b>Passwords and tokens.</b> Mailbox passwords and OAuth refresh tokens are kept in the
+            operating system keychain (Secret Service on Linux, Keychain on macOS, Credential Manager
+            on Windows) and are never written to files or logs. The access token for mail lives in
+            memory only and never reaches the disk.
+          </li>
+          <li>
+            <b>Sign-in with Google, Yandex and Microsoft.</b> Sign-in happens in the system browser
+            over OAuth 2.0 with PKCE; the answer comes back to a one-shot address 127.0.0.1 on your
+            own computer. The app then logs in to the mail server with the issued token (XOAUTH2).
+            The account's address and name are used to label the mailbox in the app.
+          </li>
+          <li>
+            <b>Update checks.</b> The app occasionally asks GitHub whether a new version exists. You
+            can switch the check off in Settings. Every update is signed and verified with a key
+            built into the app.
+          </li>
+          <li>
+            <b>Sender logos.</b> Next to a message the app may show a company logo when the message
+            passed the sender's authentication (DMARC). For that it asks the sender's domain for the
+            DNS records <code>_dmarc.domain</code> and <code>default._bimi.domain</code> and, if the
+            domain published such a logo, downloads it over HTTPS from that same domain. A forged
+            message gets no logo. A logo is requested at most once a week per domain, and logos can
+            be switched off in the mail settings.
+          </li>
+          <li>
+            <b>Server settings.</b> When you add a mailbox the app picks the incoming and outgoing
+            servers for you. It asks the domain's DNS for MX and SRV records, reads configuration
+            files at <code>autoconfig.domain</code>, <code>domain/.well-known/autoconfig</code> and
+            <code>autoconfig.thunderbird.net</code>, and probes ordinary addresses such as
+            <code>mail.domain</code> and <code>imap.domain</code>. For Exchange it looks up the
+            Autodiscover address the same way. All of this happens while the mailbox is being set up.
+          </li>
+          <li>
+            <b>Unsubscribing.</b> If you press “Unsubscribe”, the app may send a request to the
+            newsletter's server (one-click unsubscribe) or a message from your mailbox — only after
+            you confirm it, and only to the address the sender gave.
+          </li>
+          <li>
+            <b>Extensions.</b> Third-party extensions that you installed yourself go out only to the
+            servers named in their description and confirmed by you at installation.
+          </li>
+          <li>
+            <b>Images and links in messages.</b> Remote images and read receipts are not loaded by
+            default, and before opening a link the app shows you where it really leads.
+          </li>
+          <li>
+            <b>Local data.</b> Settings, the mail cache, the search index and your drafts are stored
+            in the app's data folder on your computer.
+          </li>
+        </ul>
+
+        <h2>How it is used</h2>
+        <p>
+          Only to do what you ask of a mail client: receive, show, search and sort your mail, sort it
+          into folders, snooze it, reply, forward and send, and keep it readable offline. There is no
+          other purpose. The data is not used for advertising, profiling or analytics, is not used to
+          train artificial intelligence models, and is not sold, rented or transferred to anyone.
+        </p>
+
+        <h2>Storage and security</h2>
+        <p>
+          Everything the app keeps stays on your computer, and the copies of your messages stay on
+          your mail server. There is no Depesha server, no cloud account and no backup held by the
+          developer. Passwords and refresh tokens are stored in the operating system keychain; the
+          access token exists only in the app's memory while it runs. Mail is transferred over
+          encrypted connections (TLS) to the servers you configured, and the app refuses to send a
+          password unencrypted unless you turn that on yourself, with a warning. The source code is
+          open (MIT OR Apache-2.0), so all of this can be checked.
+        </p>
+
+        <h2>Sharing</h2>
+        <p>
+          Depesha does not sell, rent, trade or otherwise transfer your data to third parties. Your
+          mail, attachments, contacts and account details travel only between your computer and your
+          mail servers. The app has no advertising, no analytics service, no crash-reporting service
+          and no tracking of any kind. Nobody reads your mail: the developer has no access to it, and
+          there is no human review of user data. The one exception is what you do yourself — the
+          service requests listed above (a sender's DNS records and logo, a newsletter's unsubscribe
+          address, or servers named by an extension you installed), each of which goes only to that
+          server.
+        </p>
+
+        <h2>Retention and deletion</h2>
+        <p>
+          Data is kept for as long as the mailbox is set up in the app. To delete it, remove the
+          account in the app's settings: the app erases that account's cached messages, message
+          bodies, search index and service records, and removes its password or token from the
+          operating system keychain. Deleting the app deletes its data folder with it. Messages on
+          the server are not deleted by any of this: they belong to your mail provider, and you
+          delete them there, in the app or in webmail.
+        </p>
+
+        <h2>Google user data</h2>
+        <p>
+          Signing in with Google is one of the ways to add a mailbox; the app also works without it,
+          with any IMAP/SMTP server. If you sign in with Google, the app asks Google for:
+        </p>
+        <ul>
+          <li>
+            <b><code>https://mail.google.com/</code> — mail.</b> The app connects to Gmail over IMAP
+            and SMTP with the issued token to read, show, organize and send your own mail: apply
+            labels, archive, move and delete messages, send your replies and drafts. The app needs no
+            other access to the mailbox.
+          </li>
+          <li>
+            <b><code>openid</code>, <code>email</code>, <code>profile</code> — the account.</b> The
+            address and the name, to label the mailbox in the list and to show which address you
+            signed in with.
+          </li>
+        </ul>
+        <p>
+          <b>How Google user data is used.</b> Only to receive, show, organize and send your mail on
+          your computer. Google user data is not used for advertising, profiling, analytics, training
+          of artificial intelligence models or any other purpose.
+        </p>
+        <p>
+          <b>Where it is stored.</b> The refresh token is kept in the operating system keychain, the
+          access token in memory, and mail and its cache in the app's data folder on your disk. The
+          app has no server of its own, so Google user data does not leave your computer except in
+          the exchange with Google's servers.
+        </p>
+        <p>
+          <b>Sharing.</b> The app does not sell, transfer or disclose Google user data to anyone. The
+          data goes only between your computer and Google's servers (OAuth, IMAP, SMTP). The
+          developer and staff have no access to your mail and do not read it: there is no human
+          reading of the data.
+        </p>
+        <p>
+          <b>Retention and deletion of Google user data.</b> It is kept for as long as the mailbox is
+          set up in the app. To delete it, remove the account in the app's settings: the mail cache
+          and the token are deleted. You can revoke the app's access to your Google account at any
+          time at
+          <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>;
+          after that the issued token stops working. Deleting the app also deletes its data folder.
+        </p>
+        <p>
+          Depesha's use and transfer to any other app of information received from Google APIs will
+          adhere to the
+          <a href="https://developers.google.com/terms/api-services-user-data-policy"
+            >Google API Services User Data Policy</a
+          >, including the Limited Use requirements.
+        </p>
+
+        <h2>The website</h2>
+        <p>
+          The website is a set of static pages. It sets no cookies and uses no analytics, visitor
+          counters, advertising or trackers. Fonts, the logo and all images are served from our own
+          domain. The only external server the page talks to is api.github.com: once when it opens
+          (and not more than once in 10 minutes) it asks GitHub for the latest version number, so
+          that the buttons and download links point at current files. The request carries no cookie
+          and no page address (no-referrer); GitHub sees your IP address, as it does for any request
+          to its server. If no answer arrives, the page shows the version recorded at build time.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          The source code of the app is open, and everything above can be checked in it. Questions
+          and remarks go to the
+          <a href="https://github.com/fgbm/depesha/issues">repository issues</a>. Please report
+          vulnerabilities privately through the
+          <a href="https://github.com/fgbm/depesha/security/policy">security policy</a>.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          When this policy changes, a new revision with a new effective date appears on this page.
+          A new revision applies to new versions of the app and does not widen access to data the app
+          has already received.
+        </p>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .legal {
+    padding: 150px 0 110px;
+  }
+  .legal-date {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--ink-3);
+  }
+  .legal-body {
+    margin-top: 40px;
+    max-width: 46em;
+    display: grid;
+    gap: 18px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .legal-body h2 {
+    margin-top: 20px;
+    font: 600 clamp(24px, 2.4vw, 32px) / 1.15 var(--serif);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .legal-body ul {
+    display: grid;
+    gap: 14px;
+    padding-left: 1.2em;
+  }
+  .legal-body li {
+    padding-left: 4px;
+  }
+  .legal-body a {
+    color: var(--wax);
+  }
+  .legal-body code {
+    font: 500 0.92em / 1 var(--sans);
+    background: var(--paper-2);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--ink);
+  }
+  /* Длинные адреса и токены в коде переносятся, иначе узкий экран получает
+     горизонтальную прокрутку (проверяет scripts/check-overflow.mjs). */
+  .legal-body code,
+  .legal-body a {
+    overflow-wrap: anywhere;
+  }
+</style>

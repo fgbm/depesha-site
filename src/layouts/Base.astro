@@ -6,30 +6,43 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title: string;
   description: string;
+  lang?: 'ru' | 'en';
+  /** Пути этой же страницы на двух языках: из них собираются hreflang. */
+  alternates?: { ru: string; en: string };
 }
 
-const { title, description } = Astro.props;
+const { title, description, lang = 'ru', alternates } = Astro.props;
 const site = Astro.site ?? new URL('https://depesha-app.ru');
 const canonical = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL('/og.png', site).href;
+const abs = (path: string) => new URL(path, site).href;
 ---
 
 <!doctype html>
-<html lang="ru">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {
+      alternates && (
+        <>
+          <link rel="alternate" hreflang="ru" href={abs(alternates.ru)} />
+          <link rel="alternate" hreflang="en" href={abs(alternates.en)} />
+          <link rel="alternate" hreflang="x-default" href={abs(alternates.ru)} />
+        </>
+      )
+    }
     <meta name="theme-color" content="#1d2532" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Депеша" />
-    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content={lang === 'en' ? 'Depesha (Депеша)' : 'Депеша'} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'ru_RU'} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -42,8 +55,8 @@ const ogImage = new URL('/og.png', site).href;
     <meta name="twitter:image" content={ogImage} />
   </head>
   <body>
-    <Nav />
+    <Nav lang={lang} />
     <slot />
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

@@ -106,7 +106,9 @@ const probe = () => {
 
 const pages = [
   { path: '/', name: '/', scroll: true },
+  { path: '/en/', name: '/en/', scroll: false },
   { path: '/privacy/', name: '/privacy/', scroll: false },
+  { path: '/en/privacy/', name: '/en/privacy/', scroll: false },
   { path: '/404.html', name: '/404.html', scroll: false },
 ];
 const widths = [320, 360, 375, 412];

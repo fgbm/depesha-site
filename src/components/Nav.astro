@@ -1,17 +1,38 @@
 ---
-// Плавающее меню: то же на всех страницах, якоря ведут на главную.
+// Плавающее меню: то же на всех страницах, якоря ведут на главную своего языка.
+interface Props {
+  lang?: 'ru' | 'en';
+}
+
+const { lang = 'ru' } = Astro.props;
+const en = lang === 'en';
 ---
 
 <header class="nav" id="nav">
   <div class="bar">
-    <a class="brand" href="/#top"><img src="/logo/depesha.svg" alt="" />Депеша</a>
+    <a class="brand" href={en ? '/en/' : '/#top'}
+      ><img src="/logo/depesha.svg" alt="" />{en ? 'Depesha' : 'Депеша'}</a
+    >
     <nav>
-      <a href="/#story">Как это работает</a>
-      <a href="/#servers">Exchange и Gmail</a>
-      <a href="/#never">Безопасность</a>
-      <a href="https://github.com/fgbm/depesha">GitHub</a>
+      {
+        en ? (
+          <>
+            <a href="/en/#story">What it does</a>
+            <a href="/en/#servers">Any server</a>
+            <a href="/en/privacy/">Privacy</a>
+            <a href="https://github.com/fgbm/depesha">GitHub</a>
+          </>
+        ) : (
+          <>
+            <a href="/#story">Как это работает</a>
+            <a href="/#servers">Exchange и Gmail</a>
+            <a href="/#never">Безопасность</a>
+            <a href="https://github.com/fgbm/depesha">GitHub</a>
+          </>
+        )
+      }
     </nav>
-    <a class="btn btn-wax" href="/#download">Скачать</a>
+    <a class="btn btn-wax" href={en ? '/en/#download' : '/#download'}>{en ? 'Download' : 'Скачать'}</a>
   </div>
 </header>
 

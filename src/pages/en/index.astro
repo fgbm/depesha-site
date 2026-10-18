@@ -1,0 +1,342 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getDownloads, pick } from '../../lib/releases';
+
+// Последний релиз запрашивается во время сборки; при ошибке — ссылки на страницу релизов.
+const downloads = await getDownloads();
+const version = downloads.version;
+const linux = [
+  { label: 'AppImage', href: pick(downloads.linux.appimage) },
+  { label: '.deb', href: pick(downloads.linux.deb) },
+  { label: '.rpm', href: pick(downloads.linux.rpm) },
+];
+const windows = [
+  { label: '.msi', href: pick(downloads.windows.msi) },
+  ...(downloads.windows.exe ? [{ label: '.exe', href: downloads.windows.exe }] : []),
+];
+const mac = [
+  { label: 'Apple Silicon', href: pick(downloads.mac.arm) },
+  { label: 'Intel', href: pick(downloads.mac.x64) },
+];
+---
+
+<Base
+  title="Depesha (Депеша) — desktop email client for IMAP, Gmail and Exchange"
+  description="Depesha is a free, open-source desktop email client for Windows, macOS and Linux. It works with any IMAP/SMTP server, Gmail, Outlook.com and Exchange, and keeps your mail on your computer: no Depesha server, no analytics, no telemetry."
+  lang="en"
+  alternates={{ ru: '/', en: '/en/' }}
+>
+  <main>
+    <section class="hero hero-en grain" id="top">
+      <div class="wrap">
+        <div>
+          <p class="kicker">Free, open-source email client for the desktop</p>
+          <h1>
+            <span class="line"><span>Depesha</span></span>
+            <span class="line"><span><em>(Депеша)</em></span></span>
+          </h1>
+          <p class="lede">
+            Depesha is a desktop email client for Windows, macOS and Linux that works with any
+            IMAP/SMTP server, Gmail, Outlook.com and Exchange — including servers where only OWA is
+            open. It receives, sorts and sends your mail straight from your computer: there is no
+            Depesha account, no Depesha server, no analytics and no telemetry.
+          </p>
+          <div class="cta">
+            <a class="btn btn-wax" href="#download"
+              ><span class="os"><span>Download Depesha</span><small>free, open source</small></span></a
+            >
+            <a class="btn btn-ghost" href="#story">What it does</a>
+          </div>
+          <div class="fine">
+            <span>Windows, macOS, Linux</span><span>Gmail, Outlook.com, Exchange and any IMAP</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="story" id="story">
+      <div class="wrap">
+        <h2 class="sec-title">What the app <em>does</em></h2>
+        <p class="sec-lede">
+          Depesha is a mail client: it receives mail and it sends mail. Everything else in it serves
+          those two things.
+        </p>
+        <ul class="en-list">
+          <li>
+            <b>Receives your mail</b>
+            <span
+              >Messages come from your mail server over IMAP or Exchange Web Services and are stored
+              on your computer, so they open instantly and stay readable offline.</span
+            >
+          </li>
+          <li>
+            <b>Sorts it like a to-do list</b>
+            <span
+              ><code>e</code> marks a message done and archives it, <code>h</code> snoozes it,
+              <code>#</code> deletes it, <code>z</code> takes the move back, and the next message
+              opens by itself.</span
+            >
+          </li>
+          <li>
+            <b>Brings mail back when it is due</b>
+            <span
+              >Snoozed mail waits in a real server folder — visible in webmail too — and returns
+              unread at the time you chose.</span
+            >
+          </li>
+          <li>
+            <b>Keeps track of answers</b>
+            <span
+              >Ask for a reminder when you send; “Waiting for reply” lists mail nobody answered, and
+              the reminder clears itself when the answer arrives.</span
+            >
+          </li>
+          <li>
+            <b>Sends, and lets you take it back</b>
+            <span
+              >Ten seconds to undo a sent message, scheduled sending, and a check before sending that
+              catches a missing attachment, outsiders among the recipients, a huge recipient list or
+              no subject.</span
+            >
+          </li>
+          <li>
+            <b>Finds anything</b>
+            <span
+              >Full-text search over your mail with operators such as <code>from:</code>,
+              <code>subject:</code>, <code>has:attachment</code> or <code>before:</code>, plus a
+              command palette on <code>Ctrl+K</code> for any action or folder.</span
+            >
+          </li>
+          <li>
+            <b>Keeps people and robots apart</b>
+            <span
+              >Newsletters and automatic mail are recognised by their headers and shown separately;
+              one-click unsubscribe, and notifications only for mail from people.</span
+            >
+          </li>
+          <li>
+            <b>Handles several accounts</b>
+            <span
+              >A unified inbox across accounts and folders, each list with its own order and its own
+              People / Newsletters choice.</span
+            >
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="srv grain" id="servers">
+      <div class="wrap srv-grid">
+        <p class="big">
+          Works with any IMAP — from Gmail and Outlook.com to a corporate Exchange 2019.
+          <em>Even when only OWA is open.</em>
+        </p>
+        <dl>
+          <div>
+            <dt>Sign in without a password</dt>
+            <dd>
+              Google, Yandex and Microsoft through the system browser: OAuth 2.0 with PKCE, the
+              refresh token in the OS keychain.
+            </dd>
+          </div>
+          <div>
+            <dt>Exchange, quirks included</dt>
+            <dd>
+              Russian folder names, hidden calendars and contacts, the five-messages-a-minute
+              limit.
+            </dd>
+          </div>
+          <div>
+            <dt>Only OWA</dt>
+            <dd>
+              When IMAP and SMTP are closed, Depesha works through Exchange Web Services with
+              Autodiscover or the OWA address.
+            </dd>
+          </div>
+          <div>
+            <dt>Mail as it arrives</dt>
+            <dd>New mail comes at once, and the connection recovers after the laptop wakes up.</dd>
+          </div>
+          <div>
+            <dt>Without the internet</dt>
+            <dd>Downloaded mail is readable offline; older mail is found on the server.</dd>
+          </div>
+          <div>
+            <dt>English and Russian</dt>
+            <dd>The interface follows your system language and can be switched in Settings.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="never grain" id="never">
+      <div class="wrap never-grid">
+        <div>
+          <h2 class="sec-title">What Depesha <em>never does</em></h2>
+          <ul>
+            <li>
+              <b>Does not load tracking pixels.</b
+              ><span>Read receipts and remote images are blocked by default.</span>
+            </li>
+            <li>
+              <b>Does not keep passwords in files.</b
+              ><span>Only in the operating system keychain, and never in logs.</span>
+            </li>
+            <li>
+              <b>Does not send a password in clear text.</b
+              ><span>Unless you turn that on yourself, with a warning.</span>
+            </li>
+            <li>
+              <b>Does not hammer the server with a wrong password.</b
+              ><span>A mailbox pauses, and a typo will not lock a domain account.</span>
+            </li>
+            <li>
+              <b>Does not open a link blindly.</b
+              ><span>It first shows you where the link really leads.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="kb grain" id="source">
+      <div class="wrap source">
+        <h2 class="sec-title">Open source, and <em>yours</em></h2>
+        <p class="sec-lede">
+          Depesha is free software under the MIT OR Apache-2.0 licence, published at
+          <a href="https://github.com/fgbm/depesha">github.com/fgbm/depesha</a>. Its source is public,
+          so the claims above can be checked line by line.
+        </p>
+        <ul class="en-list en-list-links">
+          <li>
+            <b>Source code</b>
+            <span><a href="https://github.com/fgbm/depesha">github.com/fgbm/depesha</a></span>
+          </li>
+          <li>
+            <b>All releases</b>
+            <span><a href="https://github.com/fgbm/depesha/releases">github.com/fgbm/depesha/releases</a></span>
+          </li>
+          <li>
+            <b>Privacy policy</b>
+            <span><a href="/en/privacy/">What the app accesses, and how it is stored</a></span>
+          </li>
+          <li>
+            <b>Security policy</b>
+            <span
+              ><a href="https://github.com/fgbm/depesha/security/policy"
+                >How to report a vulnerability privately</a
+              ></span
+            >
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="dl grain" id="download">
+      <div class="wrap">
+        <img class="seal-big" src="/logo/depesha.svg" alt="" />
+        <h2>Download <em>Depesha</em></h2>
+        <p class="sub">
+          Free, with open source. It watches for new versions itself, and every update is signed.
+        </p>
+        <div class="oses">
+          <div class="os-card" data-os="linux">
+            <h4>Linux</h4>
+            <div class="fmts">
+              {linux.map((f) => <a href={f.href}>{f.label}</a>)}
+            </div>
+          </div>
+          <div class="os-card" data-os="win">
+            <h4>Windows</h4>
+            <div class="fmts">
+              {windows.map((f) => <a href={f.href}>{f.label}</a>)}
+            </div>
+          </div>
+          <div class="os-card" data-os="mac">
+            <h4>macOS</h4>
+            <div class="fmts">
+              {mac.map((f) => <a href={f.href}>{f.label}</a>)}
+            </div>
+          </div>
+        </div>
+        {version && <p class="version">Version {version}</p>}
+        <p class="warn">
+          Builds are not signed with a developer certificate yet, so on first launch Windows and
+          macOS will warn about an unknown publisher.
+        </p>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<style>
+  /* Одноколоночный первый экран: на английской странице нет демонстрации входящих. */
+  .hero-en {
+    padding: 160px 0 110px;
+  }
+  .hero-en .wrap {
+    grid-template-columns: 1fr;
+    max-width: 940px;
+    margin: 0 auto;
+  }
+  .hero-en .lede {
+    max-width: 40em;
+  }
+  .kicker {
+    margin-bottom: 18px;
+    font: 500 clamp(14px, 1.1vw, 16px) / 1.2 var(--sans);
+    letter-spacing: 0.04em;
+    color: #f0a090;
+  }
+  .en-list {
+    list-style: none;
+    margin-top: 44px;
+    display: grid;
+  }
+  .en-list li {
+    display: grid;
+    grid-template-columns: minmax(190px, 270px) 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-top: 1px solid var(--paper-3);
+  }
+  .en-list b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .en-list span {
+    color: var(--ink-2);
+  }
+  .en-list code {
+    font: 500 0.92em / 1 var(--sans);
+    background: var(--paper-2);
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: var(--ink);
+  }
+  .en-list a {
+    color: var(--wax);
+    overflow-wrap: anywhere;
+  }
+  /* У английских разделов нет второй колонки с картинкой. */
+  .never-grid {
+    grid-template-columns: 1fr;
+    max-width: 940px;
+    margin: 0 auto;
+  }
+  .source {
+    max-width: 940px;
+  }
+  .en-list-links li {
+    grid-template-columns: minmax(150px, 220px) 1fr;
+  }
+  @media (max-width: 900px) {
+    .hero-en {
+      padding: 120px 0 80px;
+    }
+    .en-list li {
+      grid-template-columns: 1fr;
+      gap: 6px;
+    }
+  }
+</style>
