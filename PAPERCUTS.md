@@ -11,3 +11,7 @@
 ## 2026-10-07 20:10 — deepseek-v4.1-flash
 
 Включал CSP через Astro → в макете много атрибутов `style="…"`, а `style-src` с любым хешем игнорирует `'unsafe-inline'` (Astro всегда добавляет хеш пустой строки), поэтому инлайн-стили блокируются как `style-src-attr`. `experimental.csp.directives` не принимает `style-src-attr` — директив в белом списке задан жёстко. Fix: дописывать `style-src-attr 'unsafe-inline'` в готовую meta на хуке `astro:build:done`; `inlineStylesheets: 'never'` сам по себе хеш не убирает.
+
+## 2026-10-21 22:35 — minimax-m3.1-flash
+
+Логотипы отправителей на кадрах 0.8.12 пропали: стенд (Dovecot) пишет свой `Authentication-Results`? Нет — не пишет, а программа после #167 доверяет только заголовку от Gmail, Яндекса, Mail.ru или Exchange Online. Свой сервер организации → своя проверка DKIM, а у писем стенда подписи нет. Обойти подменой DNS не вышло: список берёт вердикт сервера (`Store::note_verdict` пишет `messages.dmarc` от `auth.dmarc`), а своя проверка подписи его не обновляет — логотип в списке появится только с вердиктом сервера. Значит, стенду нужен либо «доверенный» ящик (например `imap.gmail.com` через подмену `/etc/hosts` + `Authentication-Results: mx.google.com; dmarc=pass …` в письмах), либо подпись DKIM плюс правка места, где вердикт пишется в кэш.
