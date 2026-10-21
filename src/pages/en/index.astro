@@ -239,6 +239,27 @@ const mac = [
         <p class="sub">
           Free, with open source. It watches for new versions itself, and every update is signed.
         </p>
+        {
+          version && (
+            <div class="fresh">
+              <h3>In version {version}</h3>
+              <ul>
+                <li>
+                  <b>The new «Ink» look.</b>
+                  <span>A cool light ground, a dark blue sidebar and a blue accent. Five more looks to choose from.</span>
+                </li>
+                <li>
+                  <b>The settings window is new.</b>
+                  <span>Sections in a menu on the left, the page on the right, and the search finds settings in live rows.</span>
+                </li>
+                <li>
+                  <b>The sender is confirmed.</b>
+                  <span>Where the mail server does not check it, Depesha checks the signature itself.</span>
+                </li>
+              </ul>
+            </div>
+          )
+        }
         <div class="oses">
           <div class="os-card" data-os="linux">
             <h4>Linux</h4>
@@ -286,7 +307,7 @@ const mac = [
     margin-bottom: 18px;
     font: 500 clamp(14px, 1.1vw, 16px) / 1.2 var(--sans);
     letter-spacing: 0.04em;
-    color: #f0a090;
+    color: var(--accent-hi);
   }
   .en-list {
     list-style: none;
@@ -315,7 +336,7 @@ const mac = [
     color: var(--ink);
   }
   .en-list a {
-    color: var(--wax);
+    color: var(--accent);
     overflow-wrap: anywhere;
   }
   /* У английских разделов нет второй колонки с картинкой. */
