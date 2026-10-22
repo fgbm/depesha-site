@@ -1,5 +1,9 @@
 ---
+import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import Reveal from '../../components/Reveal.astro';
+import Shots from '../../components/Shots.astro';
+import heroShot from '../../../assets/screenshots/english.png';
 import { getDownloads, pick } from '../../lib/releases';
 
 // Последний релиз запрашивается во время сборки; при ошибке — ссылки на страницу релизов.
@@ -50,6 +54,23 @@ const mac = [
           <div class="fine">
             <span>Windows, macOS, Linux</span><span>Gmail, Outlook.com, Exchange and any IMAP</span>
           </div>
+        </div>
+        <div class="stage">
+          <figure class="shot-hero">
+            <div class="shot-frame">
+              <Picture
+                src={heroShot}
+                formats={['avif', 'webp']}
+                fallbackFormat="png"
+                widths={[560, 840, 1280]}
+                sizes="(max-width: 900px) 92vw, 620px"
+                alt="The Depesha window: folders on the left, the inbox with the logo of a confirmed sender in the middle, an open letter on the right."
+                loading="eager"
+                fetchpriority="high"
+              />
+            </div>
+            <figcaption>Depesha 0.8.13 in the light «Ink» look. The mailbox is a demo one.</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -199,6 +220,8 @@ const mac = [
       </div>
     </section>
 
+    <Shots lang="en" />
+
     <section class="kb grain" id="source">
       <div class="wrap source">
         <h2 class="sec-title">Open source, and <em>yours</em></h2>
@@ -287,18 +310,13 @@ const mac = [
         </p>
       </div>
     </section>
+    <Reveal />
   </main>
 </Base>
 
 <style>
-  /* Одноколоночный первый экран: на английской странице нет демонстрации входящих. */
   .hero-en {
     padding: 160px 0 110px;
-  }
-  .hero-en .wrap {
-    grid-template-columns: 1fr;
-    max-width: 940px;
-    margin: 0 auto;
   }
   .hero-en .lede {
     max-width: 40em;

@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import Story from '../components/Story.astro';
 import Sort from '../components/Sort.astro';
 import Palette from '../components/Palette.astro';
+import Shots from '../components/Shots.astro';
 import Servers from '../components/Servers.astro';
 import Never from '../components/Never.astro';
 import Download from '../components/Download.astro';
@@ -21,6 +22,7 @@ const downloads = await getDownloads();
 >
   <Hero downloads={downloads} />
   <Story />
+  <Shots />
   <Sort />
   <Palette />
   <Servers />
