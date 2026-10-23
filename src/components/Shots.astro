@@ -1,8 +1,6 @@
 ---
 import { Picture } from 'astro:assets';
 import compose from '../../assets/screenshots/compose.png';
-import dark from '../../assets/screenshots/dark.png';
-import followups from '../../assets/screenshots/followups.png';
 import meeting from '../../assets/screenshots/meeting.png';
 import palette from '../../assets/screenshots/palette.png';
 import snooze from '../../assets/screenshots/snooze.png';
@@ -27,11 +25,6 @@ const shots =
           caption: 'Snooze: this evening, tomorrow morning, next week or the time you pick.',
         },
         {
-          src: followups,
-          alt: 'The “Waiting for reply” list with the letter open and its panel: waiting since Monday, reminds on Saturday.',
-          caption: 'Waiting for reply: whom you wrote to and who has not answered yet.',
-        },
-        {
           src: meeting,
           alt: 'A calendar invitation in the reader as a card: title, time, place, organiser and the participants’ answers.',
           caption: 'A calendar invitation reads as a card: time, place, participants.',
@@ -40,11 +33,6 @@ const shots =
           src: palette,
           alt: 'The command palette over the window: a search field and the list of commands with their keys.',
           caption: 'Ctrl+K: any action or any folder by the first letters.',
-        },
-        {
-          src: dark,
-          alt: 'The same window in the dark “Ink” look: a dark list, a dark reader, a light letter body.',
-          caption: 'The dark “Ink” look.',
         },
       ]
     : [
@@ -59,11 +47,6 @@ const shots =
           caption: 'Отложить: вечером, завтра утром, на следующей неделе или когда скажете.',
         },
         {
-          src: followups,
-          alt: 'Раздел «Ждут ответа»: письмо открыто, над ним панель ожидания — ждём с понедельника, напомним в субботу.',
-          caption: 'Ждут ответа: кому вы писали и кто ещё не ответил.',
-        },
-        {
           src: meeting,
           alt: 'Приглашение в календарь в читалке карточкой: название, время, место, организатор и ответы участников.',
           caption: 'Приглашение в календарь — карточкой: время, место, участники.',
@@ -72,11 +55,6 @@ const shots =
           src: palette,
           alt: 'Палитра команд над окном: поле поиска и список команд с их клавишами.',
           caption: 'Ctrl+K: любое действие или папка по началу слова.',
-        },
-        {
-          src: dark,
-          alt: 'То же окно в тёмной теме «Чернила»: тёмная боковая панель, тёмный список, светлое тело письма.',
-          caption: 'Тёмная тема «Чернила».',
         },
       ];
 ---
@@ -103,8 +81,8 @@ const shots =
                 src={s.src}
                 formats={['avif', 'webp']}
                 fallbackFormat="png"
-                widths={[560, 840, 1280]}
-                sizes="(max-width: 900px) 92vw, 560px"
+                widths={[520, 760, 1040]}
+                sizes="(max-width: 900px) 92vw, 500px"
                 alt={s.alt}
                 loading="lazy"
                 decoding="async"

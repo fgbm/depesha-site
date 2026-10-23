@@ -250,7 +250,7 @@ a{color:inherit}
 
 /* ---------- screenshots ---------- */
 .shots{padding:150px 0;background:var(--paper-2)}
-.shots-grid{display:grid;gap:46px;margin-top:56px;max-width:1040px}
+.shots-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:46px 44px;margin-top:56px;max-width:1040px}
 .shots figure{margin:0}
 .shots .shot-frame{box-shadow:0 0 0 1px var(--paper-edge),0 26px 50px -34px rgba(23,34,46,.55)}
 .shots figcaption{margin-top:12px;font-size:14.5px;line-height:1.45;color:var(--ink-2);text-wrap:pretty}
@@ -379,7 +379,7 @@ a{color:inherit}
   .steps{padding-bottom:0}
   .sort,.kb,.srv,.never,.dl,.shots{padding:100px 0}
   .sort-grid,.kb-grid,.srv-grid,.never-grid{grid-template-columns:minmax(0,1fr);gap:50px}
-  .shots-grid{gap:34px;margin-top:36px}
+  .shots-grid{grid-template-columns:minmax(0,1fr);gap:34px;margin-top:36px}
   .flow{transform:scale(var(--fs,.56));transform-origin:0 0;margin-bottom:calc(440px * (var(--fs,.56) - 1))}
   .srv dl div{grid-template-columns:1fr;gap:4px}
   .oses{grid-template-columns:1fr}
