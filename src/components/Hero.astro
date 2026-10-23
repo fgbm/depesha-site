@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { downloads } = Astro.props;
+const ver = downloads.version ? ` ${downloads.version}` : '';
 const linux = downloads.linux.appimage ?? downloads.linux.deb ?? '';
 const win = downloads.windows.msi ?? downloads.windows.exe ?? '';
 const macArm = downloads.mac.arm ?? '';
@@ -69,7 +70,7 @@ const macX64 = downloads.mac.x64 ?? '';
           />
         </div>
         <figcaption>
-          Депеша 0.8.13, тема «Чернила»: письмо открыто, у подтверждённого отправителя — логотип.
+          Депеша{ver}, тема «Чернила»: письмо открыто, у подтверждённого отправителя — логотип.
         </figcaption>
       </figure>
     </div>
