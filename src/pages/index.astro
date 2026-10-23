@@ -22,7 +22,7 @@ const downloads = await getDownloads();
 >
   <Hero downloads={downloads} />
   <Story />
-  <Shots />
+  <Shots version={downloads.version} />
   <Sort />
   <Palette />
   <Servers />

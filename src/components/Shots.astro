@@ -7,9 +7,16 @@ import snooze from '../../assets/screenshots/snooze.png';
 
 interface Props {
   lang?: 'ru' | 'en';
+  /** Версия последнего релиза с GitHub; null, если сборка не получила его. */
+  version?: string | null;
 }
 
-const { lang = 'ru' } = Astro.props;
+const { lang = 'ru', version } = Astro.props;
+const ver = version ? ` ${version}` : '';
+const lede =
+  lang === 'en'
+    ? `Screens of the released app${ver}, taken on a test mailbox. The mail is a demo one: names and addresses are invented.`
+    : `Снимки выпущенного приложения${ver} на тестовом ящике. Почта демонстрационная: имена и адреса выдуманы.`;
 
 const shots =
   lang === 'en'
@@ -65,13 +72,7 @@ const shots =
     <h2 class="sec-title rv">
       {lang === 'en' ? <>The app, <em>screen by screen</em></> : <>Приложение <em>экранами</em></>}
     </h2>
-    <p class="sec-lede rv">
-      {
-        lang === 'en'
-          ? 'Screens of the released app 0.8.13, taken on a test mailbox. The mail is a demo one: names and addresses are invented.'
-          : 'Снимки выпущенного приложения 0.8.13 на тестовом ящике. Почта демонстрационная: имена и адреса выдуманы.'
-      }
-    </p>
+    <p class="sec-lede rv">{lede}</p>
     <div class="shots-grid">
       {
         shots.map((s) => (
